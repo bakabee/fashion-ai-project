@@ -98,23 +98,26 @@ function FashionModelScene({
 }
 
 function safeCloneMaterial(material) {
-  if (!material) return material;
+  if (!material) return null;
 
   if (Array.isArray(material)) {
-    return material.map((item) => safeCloneMaterial(item));
+    if (material.length === 0) return material;
+    return material.map((m) => safeCloneMaterial(m)).filter(Boolean);
   }
 
-  if (typeof material.clone !== "function") {
-    return material;
-  }
+  if (typeof material !== "object") return material;
+
+  if (typeof material.clone !== "function") return material;
+
+  if (material instanceof THREE.ShaderMaterial) return material;
 
   try {
     const cloned = material.clone();
     if (cloned) {
-      cloned.userData = { ...cloned.userData, fashionClonedMaterial: true };
+      cloned.userData = { ...(cloned.userData || {}), fashionClonedMaterial: true };
       return cloned;
     }
-  } catch (error) {
+  } catch {
     return material;
   }
   return material;
@@ -160,9 +163,13 @@ function LoadedFbxModel({ mode, designOptions, interactive = false }) {
 
       if (!child.material) return;
 
-      const clonedMaterial = safeCloneMaterial(child.material);
-      if (clonedMaterial) {
-        child.material = clonedMaterial;
+      try {
+        const clonedMaterial = safeCloneMaterial(child.material);
+        if (clonedMaterial) {
+          child.material = clonedMaterial;
+        }
+      } catch {
+        // Skip uncloneable materials
       }
     });
 

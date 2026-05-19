@@ -190,3 +190,46 @@ img {
     transition-duration: 0.001ms !important;
   }
 }
+
+/* 3D Viewer isolation — prevents Canvas from leaking into other pages */
+.viewer-page {
+  isolation: isolate;
+  position: relative;
+  z-index: 1;
+}
+
+.viewer-canvas-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.viewer-canvas-container canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.viewer-controls {
+  position: relative;
+  z-index: 10;
+  background: rgba(255, 247, 240, 0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(32, 26, 31, 0.08);
+}
+
+/* Studio page layout */
+.studio-shell {
+  isolation: isolate;
+  position: relative;
+}
+
+.studio-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.studio-content {
+  position: relative;
+  z-index: 1;
+}
