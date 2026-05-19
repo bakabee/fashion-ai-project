@@ -23,10 +23,14 @@ frontend/build/
 coverage/
 
 # Datasets, archives, and model/binary artifacts
-data/
-dataset/
-datasets/
-models/
+/data/
+/dataset/
+/datasets/
+/models/
+backend/data/
+backend/dataset/
+backend/datasets/
+backend/models/
 frontend/public/models/
 *.pt
 *.pth
