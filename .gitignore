@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+
+# Python environments and caches
+venv/
+.venv/
+backend/venv/
+__pycache__/
+*.py[cod]
+
+# Environment and local tooling
+.env
+.env.*
+.DS_Store
+.vscode/
+.codex/
+
+# Build outputs
+build/
+dist/
+frontend/build/
+coverage/
+
+# Datasets, archives, and model/binary artifacts
+data/
+dataset/
+datasets/
+models/
+frontend/public/models/
+*.pt
+*.pth
+*.pkl
+*.h5
+*.onnx
+*.csv
+*.zip
+*.rar
+*.fbx
