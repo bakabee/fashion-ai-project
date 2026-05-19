@@ -2,9 +2,10 @@ import { useEffect } from 'react';
 import Lenis from '@studio-freight/lenis';
 import Scene1Hero from '../sections/CinematicHome/Scene1Hero';
 import Scene2Inspiration from '../sections/CinematicHome/Scene2Inspiration';
-import Scene3Transitions from '../sections/CinematicHome/Scene3Transitions';
+import Scene2GarmentStructure from '../sections/CinematicHome/Scene2GarmentStructure';
+import Scene3DesignCustomization from '../sections/CinematicHome/Scene3DesignCustomization';
 import Scene4ThreeDPreview from '../sections/CinematicHome/Scene4ThreeDPreview';
-import Scene5Fadeout from '../sections/CinematicHome/Scene5Fadeout';
+import Scene5PatternGeneration from '../sections/CinematicHome/Scene5PatternGeneration';
 import CTAScreen from '../sections/CinematicHome/CTAScreen';
 
 export default function Home() {
@@ -33,9 +34,10 @@ export default function Home() {
     <div className="w-full bg-luxury-bg">
       <Scene1Hero />
       <Scene2Inspiration />
-      <Scene3Transitions />
+      <Scene2GarmentStructure />
+      <Scene3DesignCustomization />
       <Scene4ThreeDPreview />
-      <Scene5Fadeout />
+      <Scene5PatternGeneration />
       <CTAScreen />
     </div>
   );
