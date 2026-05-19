@@ -7,6 +7,7 @@
 @layer base {
   html {
     scroll-behavior: auto;
+    background-color: #0f0f0f;
   }
 
   body {
@@ -14,10 +15,39 @@
     font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: #0f0f0f;
+    color: #ffffff;
   }
 
   ::selection {
-    color: #fff7f0;
-    background: #ff4fa3;
+    color: #000000;
+    background: #8d5cff;
+  }
+
+  #root {
+    min-height: 100vh;
   }
 }
+
+@layer components {
+  .glass-effect {
+    @apply bg-luxury-glass backdrop-blur-glass border border-white/10;
+  }
+
+  .glass-hover {
+    @apply hover:bg-luxury-glass_hover transition-all duration-300;
+  }
+
+  .btn-primary {
+    @apply px-8 py-3 rounded-lg font-semibold text-white transition-all duration-300;
+  }
+
+  .btn-glass {
+    @apply btn-primary glass-effect glass-hover;
+  }
+
+  .section-padding {
+    @apply px-4 md:px-8 lg:px-16;
+  }
+}
+

@@ -1,36 +1,43 @@
-import { AnimatePresence, motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import { Header } from "../components/Header";
-import { Hero } from "../sections/Hero";
-import { StoryIntro } from "../sections/StoryIntro";
-import { CategoryStoryboard } from "../sections/CategoryStoryboard";
-import { CatalogShowcase } from "../sections/CatalogShowcase";
-import { AIFeature } from "../sections/AIFeature";
-import { FinalCTA } from "../sections/FinalCTA";
-import { useLenis } from "../hooks/useLenis";
-import { useScrollStory } from "../hooks/useScrollStory";
+import { useEffect } from 'react';
+import Lenis from '@studio-freight/lenis';
+import Scene1Hero from '../sections/CinematicHome/Scene1Hero';
+import Scene2Inspiration from '../sections/CinematicHome/Scene2Inspiration';
+import Scene3Transitions from '../sections/CinematicHome/Scene3Transitions';
+import Scene4ThreeDPreview from '../sections/CinematicHome/Scene4ThreeDPreview';
+import Scene5Fadeout from '../sections/CinematicHome/Scene5Fadeout';
+import CTAScreen from '../sections/CinematicHome/CTAScreen';
 
 export default function Home() {
-  useLenis();
-  useScrollStory();
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      direction: 'vertical',
+      gestureDirection: 'vertical',
+      smooth: true,
+      smoothTouch: false,
+      touchMultiplier: 2,
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => lenis.destroy();
+  }, []);
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.main
-        className="fashion-story min-h-screen overflow-x-hidden bg-[var(--color-bg)] text-[var(--color-ink)]"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      >
-        <Header />
-        <Hero />
-        <StoryIntro />
-        <CategoryStoryboard />
-        <CatalogShowcase />
-        <AIFeature />
-        <FinalCTA />
-      </motion.main>
-    </AnimatePresence>
+    <div className="w-full bg-luxury-bg">
+      <Scene1Hero />
+      <Scene2Inspiration />
+      <Scene3Transitions />
+      <Scene4ThreeDPreview />
+      <Scene5Fadeout />
+      <CTAScreen />
+    </div>
   );
 }
+
