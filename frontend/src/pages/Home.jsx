@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
 import Lenis from '@studio-freight/lenis';
-import Scene1Hero from '../sections/CinematicHome/Scene1Hero';
-import Scene2Inspiration from '../sections/CinematicHome/Scene2Inspiration';
-import Scene2GarmentStructure from '../sections/CinematicHome/Scene2GarmentStructure';
-import Scene3DesignCustomization from '../sections/CinematicHome/Scene3DesignCustomization';
-import Scene4ThreeDPreview from '../sections/CinematicHome/Scene4ThreeDPreview';
-import Scene5PatternGeneration from '../sections/CinematicHome/Scene5PatternGeneration';
-import CTAScreen from '../sections/CinematicHome/CTAScreen';
+import HeroSection from '../sections/LuxuryHome/HeroSection';
+import SketchInspirationWall from '../sections/LuxuryHome/SketchInspirationWall';
+import ThreeDVisualization from '../sections/LuxuryHome/ThreeDVisualization';
+import DesignSystemPreview from '../sections/LuxuryHome/DesignSystemPreview';
+import SewingPatternSection from '../sections/LuxuryHome/SewingPatternSection';
+import FinalCTA from '../sections/LuxuryHome/FinalCTA';
 
 export default function Home() {
   useEffect(() => {
@@ -31,15 +30,13 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="w-full bg-luxury-bg">
-      <Scene1Hero />
-      <Scene2Inspiration />
-      <Scene2GarmentStructure />
-      <Scene3DesignCustomization />
-      <Scene4ThreeDPreview />
-      <Scene5PatternGeneration />
-      <CTAScreen />
+    <div className="w-full bg-white">
+      <HeroSection />
+      <SketchInspirationWall />
+      <ThreeDVisualization />
+      <DesignSystemPreview />
+      <SewingPatternSection />
+      <FinalCTA />
     </div>
   );
 }
-

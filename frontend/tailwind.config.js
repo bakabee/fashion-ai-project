@@ -8,9 +8,9 @@ export default {
     extend: {
       colors: {
         fashionPink: "#ff4fa3",
-        fashionBg: "#0a0a0a",
-        fashionBeige: "#1a1a1a",
-        fashionInk: "#000000",
+        fashionBg: "#f8f8f8",
+        fashionBeige: "#f5f0eb",
+        fashionInk: "#1a1a1a",
         fashionPurple: "#8d5cff",
         dark: {
           50: "#f9fafb",
@@ -26,11 +26,11 @@ export default {
           950: "#030712",
         },
         luxury: {
-          bg: "#0f0f0f",
-          surface: "#1a1a1a",
-          surface_hover: "#242424",
-          glass: "rgba(255, 255, 255, 0.05)",
-          glass_hover: "rgba(255, 255, 255, 0.08)",
+          bg: "#fafaf9",
+          surface: "#f5f5f4",
+          surface_hover: "#efefed",
+          glass: "rgba(255, 255, 255, 0.7)",
+          glass_hover: "rgba(255, 255, 255, 0.85)",
         },
       },
       fontFamily: {
@@ -38,8 +38,8 @@ export default {
         display: ["Playfair Display", "Georgia", "serif"],
       },
       backgroundImage: {
-        "gradient-luxury": "linear-gradient(135deg, rgba(141, 92, 255, 0.1) 0%, rgba(255, 79, 163, 0.1) 100%)",
-        "gradient-glass": "linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)",
+        "gradient-luxury": "linear-gradient(135deg, rgba(0, 0, 0, 0.03) 0%, rgba(0, 0, 0, 0.01) 100%)",
+        "gradient-glass": "linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.8) 100%)",
       },
       backdropFilter: {
         glass: "blur(10px)",
