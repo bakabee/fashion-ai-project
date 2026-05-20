@@ -7,7 +7,7 @@ export default function DesignStudioPage() {
     fabricType: 'cotton',
     sleeveLength: 'long',
     neckType: 'round',
-    color: '#8d5cff',
+    color: '#5DA9A6',
     measurements: { chest: '', waist: '', length: '' },
     styleDescription: '',
   });
