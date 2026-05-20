@@ -153,6 +153,42 @@ function FloatingBlobs() {
   );
 }
 
+function FloatingStars() {
+  const groupRef = useRef();
+  const items = useMemo(() => Array.from({ length: 9 }, () => ({
+    pos: [(Math.random() - 0.5) * 11, (Math.random() - 0.5) * 8, (Math.random() - 0.5) * 6 - 3],
+    scale: 0.1 + Math.random() * 0.16,
+    speed: 0.15 + Math.random() * 0.35,
+  })), []);
+
+  useFrame(({ clock }) => {
+    if (groupRef.current) {
+      groupRef.current.rotation.y = clock.getElapsedTime() * 0.025;
+      groupRef.current.rotation.z = Math.sin(clock.getElapsedTime() * 0.012) * 0.1;
+    }
+  });
+
+  return (
+    <group ref={groupRef}>
+      {items.map((d, i) => (
+        <Float key={i} speed={d.speed} floatIntensity={0.6} rotationIntensity={0.4}>
+          <Icosahedron args={[d.scale, 0]} position={d.pos}>
+            <meshBasicMaterial color="#bbb" transparent opacity={0.05} wireframe />
+          </Icosahedron>
+        </Float>
+      ))}
+      {[0, 1].map((i) => (
+        <Float key={`s${i}`} speed={0.25} floatIntensity={0.5}>
+          <mesh position={[(Math.random() - 0.5) * 5, (Math.random() - 0.5) * 4, -4]}>
+            <dodecahedronGeometry args={[0.2 + i * 0.1, 0]} />
+            <meshBasicMaterial color="#aaa" transparent opacity={0.04} wireframe />
+          </mesh>
+        </Float>
+      ))}
+    </group>
+  );
+}
+
 const variants = {
   orbs: FloatingOrbs,
   knots: FloatingKnots,
