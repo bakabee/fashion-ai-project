@@ -2,6 +2,7 @@ import { useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { motion } from 'framer-motion';
+import ThreeDBackground from './ThreeDBackground';
 
 export default function HeroSection() {
   const containerRef = useRef(null);
@@ -36,7 +37,9 @@ export default function HeroSection() {
       ref={containerRef}
       className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-gradient-to-b from-white via-luxury-bg to-luxury-surface"
     >
-      <div className="absolute inset-0 pointer-events-none">
+      <ThreeDBackground />
+
+      <div className="absolute inset-0 pointer-events-none z-[1]">
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-black/[0.015] rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-white/80 to-transparent" />
       </div>
