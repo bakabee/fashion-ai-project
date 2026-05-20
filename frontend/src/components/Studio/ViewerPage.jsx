@@ -76,7 +76,7 @@ export default function ViewerPage() {
         <div className="viewer-canvas-wrap bg-white/90 border border-teal-400/20 rounded-2xl shadow-sm overflow-hidden mb-4">
           <div className="relative w-full" style={{ aspectRatio: '16 / 10' }}>
             <Canvas
-              camera={{ position: [0, 1.2, 3.2], fov: 30 }}
+              camera={{ position: [0, 1.8, 4.5], fov: 28 }}
               dpr={[1, 1.5]}
               gl={{ antialias: true, alpha: false, outputColorSpace: 'srgb' }}
               shadows

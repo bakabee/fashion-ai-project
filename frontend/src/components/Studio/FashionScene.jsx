@@ -166,8 +166,8 @@ export default function FashionScene({ autoRotate = true, modelId = 'top1' }) {
 
   useEffect(() => {
     if (camera) {
-      camera.position.set(0, 1.2, 3.2);
-      camera.lookAt(0, 0.4, 0);
+      camera.position.set(0, 1.8, 4.5);
+      camera.lookAt(0, 0.6, 0);
     }
   }, [camera, modelId]);
 
@@ -209,7 +209,7 @@ export default function FashionScene({ autoRotate = true, modelId = 'top1' }) {
       <Environment preset="studio" />
 
       <Center center top>
-        <Bounds fit clip damping={6} margin={1.25}>
+        <Bounds fit clip damping={6} margin={1.6}>
           <group ref={sceneGroupRef}>
             <primitive object={clonedScene} scale={1} />
           </group>
