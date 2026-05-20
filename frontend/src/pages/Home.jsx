@@ -6,7 +6,6 @@ import ThreeDVisualization from '../sections/LuxuryHome/ThreeDVisualization';
 import DesignSystemPreview from '../sections/LuxuryHome/DesignSystemPreview';
 import SewingPatternSection from '../sections/LuxuryHome/SewingPatternSection';
 import FinalCTA from '../sections/LuxuryHome/FinalCTA';
-import ThreeDBackground from '../sections/LuxuryHome/ThreeDBackground';
 
 export default function Home() {
   useEffect(() => {
@@ -31,18 +30,13 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="w-full bg-white relative">
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <ThreeDBackground />
-      </div>
-      <div className="relative z-10">
-        <HeroSection />
-        <SketchInspirationWall />
-        <ThreeDVisualization />
-        <DesignSystemPreview />
-        <SewingPatternSection />
-        <FinalCTA />
-      </div>
+    <div className="w-full bg-white">
+      <HeroSection />
+      <SketchInspirationWall />
+      <ThreeDVisualization />
+      <DesignSystemPreview />
+      <SewingPatternSection />
+      <FinalCTA />
     </div>
   );
 }
