@@ -62,13 +62,13 @@ export default function SewingPatternSection() {
   return (
     <section
       ref={containerRef}
-      className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-luxury-surface"
+      className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-luxury-surface py-16 md:py-20"
     >
-      <ThreeDBackground variant="blobs" />
       <div className="absolute inset-0 bg-gradient-to-b from-white via-luxury-bg to-luxury-surface" />
+      <ThreeDBackground variant="blobs" />
 
       <div className="relative z-10 max-w-6xl mx-auto px-6 w-full">
-        <div ref={textRef} className="text-center mb-6">
+        <div ref={textRef} className="text-center mb-8">
           <p className="text-[10px] tracking-[0.3em] uppercase text-dark-500 mb-2 font-medium">
             Technical Pattern
           </p>
@@ -79,15 +79,15 @@ export default function SewingPatternSection() {
           </h2>
         </div>
 
-        <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-12">
-          <div ref={imageRef} className="flex-1 w-full max-w-sm lg:max-w-none">
+        <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-14">
+          <div ref={imageRef} className="flex-1 w-full max-w-sm lg:max-w-lg">
             <div className="relative">
-              <div className="absolute -inset-3 bg-black/[0.03] blur-2xl" />
-              <div className="relative bg-white border border-black/5 shadow-lg p-1.5">
+              <div className="absolute -inset-4 bg-black/[0.03] blur-2xl" />
+              <div className="relative bg-white border border-black/5 shadow-lg p-2">
                 <img
                   src="/images/ff6ebb60eeb2fef83fe4f59ac4ba1aea.jpg"
                   alt="Sewing pattern technical drawing"
-                  className="w-full h-auto object-contain max-h-[35vh] lg:max-h-none"
+                  className="w-full h-auto object-contain"
                 />
                 <div className="absolute inset-0 pointer-events-none opacity-[0.03]">
                   <svg className="w-full h-full">
@@ -100,26 +100,26 @@ export default function SewingPatternSection() {
                   </svg>
                 </div>
               </div>
-              <div ref={badgeRef} className="absolute -bottom-2 -left-2 bg-white/95 backdrop-blur-sm border border-black/5 px-3 py-2 shadow-sm">
+              <div ref={badgeRef} className="absolute -bottom-3 -left-3 bg-white/95 backdrop-blur-sm border border-black/5 px-4 py-2.5 shadow-sm">
                 <p className="text-[9px] tracking-[0.2em] uppercase text-dark-500">Production Ready</p>
-                <p className="text-[11px] text-dark-600 font-medium">Pattern Grade A · Size Run 2-16</p>
+                <p className="text-xs text-dark-600 font-medium">Pattern Grade A · Size Run 2-16</p>
               </div>
             </div>
           </div>
 
-          <div className="flex-1 space-y-3 w-full">
+          <div className="flex-1 space-y-4 w-full lg:max-w-lg">
             {processSteps.map((step, i) => (
               <div
                 key={step.number}
                 ref={(el) => (stepsRef.current[i] = el)}
-                className="flex items-start gap-3 group cursor-default"
+                className="flex items-start gap-4 group cursor-default"
               >
-                <span className="text-base font-display font-bold text-dark-300 group-hover:text-dark-500 transition-colors duration-300 mt-0.5">
+                <span className="text-lg font-display font-bold text-dark-300 group-hover:text-dark-500 transition-colors duration-300 mt-0.5">
                   {step.number}
                 </span>
                 <div>
-                  <h3 className="text-xs font-semibold text-dark-700">{step.title}</h3>
-                  <p className="text-xs text-dark-500 font-light mt-0.5 leading-relaxed">{step.desc}</p>
+                  <h3 className="text-sm font-semibold text-dark-700">{step.title}</h3>
+                  <p className="text-sm text-dark-500 font-light mt-0.5 leading-relaxed">{step.desc}</p>
                 </div>
               </div>
             ))}
