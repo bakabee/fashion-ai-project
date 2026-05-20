@@ -14,14 +14,14 @@ export default function HeroSection() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-      tl.from(titleRef.current, { y: 80, opacity: 0, duration: 1.2, delay: 0.3 })
-        .from(subtitleRef.current, { y: 60, opacity: 0, duration: 1 }, '-=0.6')
-        .from(imageRef.current, { scale: 0.92, opacity: 0, duration: 1.5 }, '-=0.8')
-        .from(ctaRef.current, { y: 40, opacity: 0, duration: 0.8 }, '-=0.4');
+      tl.from(titleRef.current, { y: 60, opacity: 0, duration: 1.2, delay: 0.2 })
+        .from(subtitleRef.current, { y: 40, opacity: 0, duration: 1 }, '-=0.5')
+        .from(imageRef.current, { scale: 0.9, opacity: 0, duration: 1.5 }, '-=0.7')
+        .from(ctaRef.current, { y: 30, opacity: 0, duration: 0.8 }, '-=0.3');
 
       gsap.to(imageRef.current, {
-        y: -12,
-        duration: 4,
+        y: -8,
+        duration: 5,
         repeat: -1,
         yoyo: true,
         ease: 'sine.inOut',
@@ -36,38 +36,42 @@ export default function HeroSection() {
       ref={containerRef}
       className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-gradient-to-b from-white via-luxury-bg to-luxury-surface"
     >
-      <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-black/[0.02] rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white/80 to-transparent" />
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-black/[0.015] rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-white/80 to-transparent" />
       </div>
 
-      <div className="relative z-10 flex flex-col items-center justify-center max-w-6xl mx-auto px-6">
-        <div ref={imageRef} className="w-full max-w-md mx-auto mb-10">
-          <div className="relative">
-            <div className="absolute -inset-4 bg-black/[0.02] rounded-full blur-2xl" />
-            <img
-              src="/images/ea5f01f0ac1fcd13e8be1ed74f18678a.jpg"
-              alt="AI Fashion Design Studio"
-              className="w-full h-auto object-contain drop-shadow-xl"
-            />
+      <div className="relative z-10 flex flex-col items-center justify-center max-w-6xl mx-auto px-6 w-full">
+        <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16 w-full justify-center">
+          <div className="flex-1 max-w-md text-center md:text-right">
+            <h1
+              ref={titleRef}
+              className="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-dark-800 tracking-tight leading-tight"
+            >
+              AI Fashion
+              <br />
+              <span className="text-dark-400 font-light italic">Design Studio</span>
+            </h1>
+
+            <p
+              ref={subtitleRef}
+              className="mt-5 text-base md:text-lg text-dark-500 font-light max-w-sm mx-auto md:ml-auto"
+            >
+              Where sketches become wearable fashion
+            </p>
+          </div>
+
+          <div ref={imageRef} className="flex-shrink-0 w-56 md:w-72 lg:w-80">
+            <div className="relative">
+              <div className="absolute -inset-6 bg-black/[0.02] rounded-full blur-3xl" />
+              <img
+                src="/images/ea5f01f0ac1fcd13e8be1ed74f18678a.jpg"
+                alt="AI Fashion Design Studio"
+                className="w-full h-auto object-contain drop-xl"
+              />
+            </div>
           </div>
         </div>
-
-        <h1
-          ref={titleRef}
-          className="font-display text-6xl md:text-7xl lg:text-8xl font-bold text-dark-800 text-center tracking-tight"
-        >
-          AI Fashion
-          <br />
-          Design Studio
-        </h1>
-
-        <p
-          ref={subtitleRef}
-          className="mt-6 text-lg md:text-xl text-dark-400 font-light text-center max-w-xl"
-        >
-          Where sketches become wearable fashion
-        </p>
 
         <motion.button
           ref={ctaRef}
