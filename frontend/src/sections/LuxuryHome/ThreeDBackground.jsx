@@ -202,7 +202,7 @@ export default function ThreeDBackground({ variant = 'orbs' }) {
   const Component = variants[variant] || FloatingOrbs;
 
   return (
-    <div className="absolute inset-0 pointer-events-none z-0">
+    <div className="absolute inset-0 pointer-events-none z-[1]">
       <Canvas
         camera={{ position: [0, 0, 6], fov: 50 }}
         dpr={[1, 1.5]}

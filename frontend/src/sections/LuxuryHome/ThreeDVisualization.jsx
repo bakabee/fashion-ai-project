@@ -57,13 +57,13 @@ export default function ThreeDVisualization() {
   return (
     <section
       ref={containerRef}
-      className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-luxury-bg"
+      className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-luxury-bg py-16 md:py-20"
     >
-      <ThreeDBackground variant="boxes" />
       <div className="absolute inset-0 bg-gradient-to-b from-white via-luxury-bg to-white" />
+      <ThreeDBackground variant="boxes" />
 
       <div className="relative z-10 max-w-6xl mx-auto px-6 w-full">
-        <div ref={textRef} className="text-center mb-6 md:mb-8">
+        <div ref={textRef} className="text-center mb-8">
           <p className="text-[10px] tracking-[0.3em] uppercase text-dark-500 mb-2 font-medium">
             3D Visualization
           </p>
@@ -75,8 +75,8 @@ export default function ThreeDVisualization() {
           </h2>
         </div>
 
-        <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-12">
-          <div className="flex-1 space-y-3 w-full">
+        <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-14">
+          <div className="flex-1 space-y-4 w-full lg:max-w-lg">
             {features.map((feat, i) => (
               <div
                 key={feat.number}
@@ -86,11 +86,11 @@ export default function ThreeDVisualization() {
                 <span className="text-lg font-display font-bold text-dark-300 group-hover:text-dark-500 transition-colors duration-300 mt-0.5">
                   {feat.number}
                 </span>
-                <div className="flex-1 border-b border-black/5 pb-3 group-hover:border-black/10 transition-colors duration-300">
-                  <h3 className="text-xs font-semibold text-dark-700 uppercase tracking-wider">
+                <div className="flex-1 pb-3">
+                  <h3 className="text-sm font-semibold text-dark-700 uppercase tracking-wider">
                     {feat.title}
                   </h3>
-                  <p className="text-xs text-dark-500 font-light mt-0.5 leading-relaxed">
+                  <p className="text-sm text-dark-500 font-light mt-0.5 leading-relaxed">
                     {feat.desc}
                   </p>
                 </div>
@@ -98,16 +98,16 @@ export default function ThreeDVisualization() {
             ))}
           </div>
 
-          <div ref={imageWrapRef} className="flex-1 w-full max-w-md lg:max-w-none">
+          <div ref={imageWrapRef} className="flex-1 w-full max-w-md lg:max-w-lg">
             <div className="relative">
-              <div className="absolute -inset-3 bg-black/[0.02] blur-2xl" />
+              <div className="absolute -inset-4 bg-black/[0.02] blur-2xl" />
               <div className="relative bg-white shadow-lg">
                 <div className="absolute top-0 left-0 w-1 h-full bg-dark-800/10" />
                 <img
                   ref={imageRef}
                   src="/images/4890348bba669719bc53ad1d78fc7767.jpg"
                   alt="3D garment visualization"
-                  className="w-full h-auto object-cover max-h-[40vh] lg:max-h-none"
+                  className="w-full h-auto object-cover"
                 />
               </div>
               <div className="absolute -bottom-2 -right-2 bg-white border border-black/5 px-3 py-1.5 shadow-sm">
