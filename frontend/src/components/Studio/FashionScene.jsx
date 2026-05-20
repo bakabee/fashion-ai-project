@@ -1,22 +1,104 @@
-import { useRef, useMemo, useLayoutEffect } from 'react';
+import { useRef, useMemo, useEffect, useState } from 'react';
 import { useGLTF, Center, ContactShadows, Environment, OrbitControls, Bounds } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
-const modelMap = {
-  top1: '/models/top 1.glb',
-  top2: '/models/top 2.glb',
-  top3: '/models/top 3.glb',
-  shorts: '/models/shorts.glb',
-  sleeveless: '/models/sleaveless sweater.glb',
-  sleeved: '/models/Sleaved sweater.glb',
+const clothingConfig = {
+  top1:        { image: '/images/top1.jpg',        zone: 'upper', label: 'Top 1' },
+  top2:        { image: '/images/top2.png',        zone: 'upper', label: 'Top 2' },
+  top3:        { image: '/images/top3.jpg',        zone: 'upper', label: 'Top 3' },
+  shorts:      { image: '/images/shorts.jpg',      zone: 'lower', label: 'Shorts' },
+  sleeveless:  { image: '/images/ea5f01f0ac1fcd13e8be1ed74f18678a.jpg', zone: 'upper', label: 'Sleeveless Sweater' },
+  sleeved:     { image: '/images/sleevedsweater.jpg', zone: 'full',  label: 'Sleeved Sweater' },
 };
+
+const zoneMaterialRules = {
+  upper: [/top|shirt|upper|torso|chest|collar|sleeve/i, /body|skin|pants|bottom|leg/i],
+  lower: [/pants|bottom|lower|leg|shorts/i, /body|skin|top|shirt|upper|torso|chest/i],
+  full:  [/.*/, /skin|body|base/i],
+};
+
+function applyClothingTexture(scene, modelId, textureCache) {
+  const config = clothingConfig[modelId];
+  if (!config || !scene) return;
+
+  const texture = textureCache[modelId];
+  if (!texture) return;
+
+  const [includePattern, excludePattern] = zoneMaterialRules[config.zone] || zoneMaterialRules.full;
+  let matchedAny = false;
+
+  scene.traverse((child) => {
+    if (!child.isMesh) return;
+    const mat = child.material;
+    const matName = mat.name || child.name || '';
+
+    const shouldInclude = includePattern.test(matName);
+    const shouldExclude = excludePattern.test(matName);
+    if (!shouldInclude || shouldExclude) return;
+
+    matchedAny = true;
+    if (Array.isArray(mat)) {
+      mat.forEach((m) => applyTextureToMaterial(m, texture));
+    } else {
+      applyTextureToMaterial(mat, texture);
+    }
+  });
+
+  if (!matchedAny) {
+    scene.traverse((child) => {
+      if (!child.isMesh) return;
+      const mat = child.material;
+      const matName = mat.name || child.name || '';
+      if (/skin|base|body/i.test(matName) && config.zone !== 'full') return;
+      if (Array.isArray(mat)) {
+        mat.forEach((m) => applyTextureToMaterial(m, texture));
+      } else {
+        applyTextureToMaterial(mat, texture);
+      }
+    });
+  }
+}
+
+function applyTextureToMaterial(mat, texture) {
+  mat.map = texture;
+  mat.color.set('#ffffff');
+  mat.needsUpdate = true;
+}
+
+function preloadTextures(cb) {
+  const loader = new THREE.TextureLoader();
+  const cache = {};
+  const entries = Object.entries(clothingConfig);
+  let loaded = 0;
+
+  entries.forEach(([id, config]) => {
+    loader.load(
+      config.image,
+      (tex) => {
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+        cache[id] = tex;
+        loaded++;
+        if (loaded === entries.length) cb(cache);
+      },
+      undefined,
+      () => {
+        const fallback = new THREE.DataTexture(new Uint8Array([128, 128, 128]), 1, 1);
+        fallback.needsUpdate = true;
+        cache[id] = fallback;
+        loaded++;
+        if (loaded === entries.length) cb(cache);
+      }
+    );
+  });
+}
 
 function GradientBackground() {
   const { viewport } = useThree();
   const meshRef = useRef();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (meshRef.current) {
       const cols = [
         new THREE.Color('#F6F4F1'),
@@ -62,12 +144,27 @@ function GroundPlane() {
 
 export default function FashionScene({ autoRotate = true, modelId = 'top1' }) {
   const controlsRef = useRef();
-  const modelPath = modelMap[modelId] || modelMap.top1;
-  const { scene } = useGLTF(modelPath);
-  const sceneCopy = useMemo(() => scene.clone(), [scene]);
+  const sceneGroupRef = useRef();
   const camera = useThree((s) => s.camera);
+  const [texturesReady, setTexturesReady] = useState(false);
+  const [textureCache, setTextureCache] = useState({});
 
-  useLayoutEffect(() => {
+  const { scene: mannequin } = useGLTF('/models/fashion.glb');
+  const clonedScene = useMemo(() => mannequin.clone(), [mannequin, modelId]);
+
+  useEffect(() => {
+    preloadTextures((cache) => {
+      setTextureCache(cache);
+      setTexturesReady(true);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!texturesReady || !clonedScene) return;
+    applyClothingTexture(clonedScene, modelId, textureCache);
+  }, [modelId, texturesReady, textureCache, clonedScene]);
+
+  useEffect(() => {
     if (camera) {
       camera.position.set(0, 1.2, 3.2);
       camera.lookAt(0, 0.4, 0);
@@ -113,7 +210,9 @@ export default function FashionScene({ autoRotate = true, modelId = 'top1' }) {
 
       <Center center top>
         <Bounds fit clip damping={6} margin={1.25}>
-          <primitive object={sceneCopy} scale={1} />
+          <group ref={sceneGroupRef}>
+            <primitive object={clonedScene} scale={1} />
+          </group>
         </Bounds>
       </Center>
 

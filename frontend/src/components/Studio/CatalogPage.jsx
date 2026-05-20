@@ -7,24 +7,24 @@ const categoryGroups = [
     id: 'tops',
     label: 'Tops',
     items: [
-      { id: 'top1', name: 'Top 1', model: '/models/top 1.glb', description: 'Structured woven top with clean neckline' },
-      { id: 'top2', name: 'Top 2', model: '/models/top 2.glb', description: 'Draped silhouette with soft shoulder' },
-      { id: 'top3', name: 'Top 3', model: '/models/top 3.glb', description: 'Fitted knit top with ribbed finish' },
+      { id: 'top1', name: 'Top 1', image: '/images/top1.jpg', description: 'Structured woven top with clean neckline' },
+      { id: 'top2', name: 'Top 2', image: '/images/top2.png', description: 'Draped silhouette with soft shoulder' },
+      { id: 'top3', name: 'Top 3', image: '/images/top3.jpg', description: 'Fitted knit top with ribbed finish' },
     ],
   },
   {
     id: 'bottoms',
     label: 'Bottoms',
     items: [
-      { id: 'shorts', name: 'Shorts', model: '/models/shorts.glb', description: 'Tailored shorts with pressed crease' },
+      { id: 'shorts', name: 'Shorts', image: '/images/shorts.jpg', description: 'Tailored shorts with pressed crease' },
     ],
   },
   {
     id: 'sweaters',
     label: 'Sweaters',
     items: [
-      { id: 'sleeveless', name: 'Sleeveless Sweater', model: '/models/sleaveless sweater.glb', description: 'Fine-gauge sleeveless knit' },
-      { id: 'sleeved', name: 'Sleeved Sweater', model: '/models/Sleaved sweater.glb', description: 'Mid-weight sweater with ribbed cuffs' },
+      { id: 'sleeveless', name: 'Sleeveless Sweater', image: '/images/ea5f01f0ac1fcd13e8be1ed74f18678a.jpg', description: 'Fine-gauge sleeveless knit' },
+      { id: 'sleeved', name: 'Sleeved Sweater', image: '/images/sleevedsweater.jpg', description: 'Mid-weight sweater with ribbed cuffs' },
     ],
   },
 ];
@@ -114,13 +114,13 @@ export default function CatalogPage() {
               whileHover={{ y: -8, scale: 1.01 }}
               className="bg-white/90 backdrop-blur-sm rounded-2xl overflow-hidden group border border-teal-400/15 shadow-sm hover:shadow-2xl transition-all duration-500"
             >
-              <div className="aspect-[4/5] bg-gradient-to-br from-teal-400/8 via-beige-200/30 to-skyBlue-200/25 flex items-center justify-center relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-t from-charcoal-800/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="w-28 h-28 rounded-full border-2 border-teal-400/20 flex items-center justify-center bg-white/40 backdrop-blur-sm">
-                  <span className="font-display text-5xl text-charcoal-300 font-bold tracking-tight">
-                    {item.name.charAt(0)}
-                  </span>
-                </div>
+              <div className="aspect-[4/5] overflow-hidden relative bg-gradient-to-br from-teal-400/5 via-beige-200/20 to-skyBlue-200/15">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-charcoal-800/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               </div>
               <div className="p-6">
                 <h3 className="text-lg font-bold text-charcoal-800 mb-1.5">{item.name}</h3>
