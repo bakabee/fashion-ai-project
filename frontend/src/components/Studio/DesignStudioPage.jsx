@@ -86,8 +86,8 @@ export default function DesignStudioPage() {
                   onClick={() => handleChange('fabricType', fabric)}
                   className={`p-4 rounded-lg capitalize font-semibold transition-all ${
                     formData.fabricType === fabric
-                      ? 'bg-black text-white'
-                      : 'bg-white border border-black/10 text-dark-600 hover:bg-dark-50 hover:border-black/20'
+                      ? 'bg-charcoal-800 text-white'
+                      : 'bg-white/80 border border-teal-400/20 text-dark-600 hover:bg-white hover:border-teal-400/30'
                   }`}
                 >
                   {fabric}
