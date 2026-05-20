@@ -45,9 +45,8 @@ export default function DesignSystemPreview() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-white py-16 md:py-20"
+      className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-gradient-to-b from-teal-400/15 via-offWhite to-beige-200/20 py-16 md:py-20"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-luxury-bg via-white to-luxury-bg" />
       <ThreeDBackground variant="rings" />
 
       <div className="relative z-10 max-w-6xl mx-auto px-6 w-full">

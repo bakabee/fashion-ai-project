@@ -62,9 +62,8 @@ export default function SewingPatternSection() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-luxury-surface py-16 md:py-20"
+      className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-gradient-to-b from-skyBlue-200/25 via-beige-200/20 to-offWhite py-16 md:py-20"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-white via-luxury-bg to-luxury-surface" />
       <ThreeDBackground variant="blobs" />
 
       <div className="relative z-10 max-w-6xl mx-auto px-6 w-full">

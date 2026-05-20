@@ -44,7 +44,7 @@ export default function ViewerPage() {
   }, []);
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-luxury-bg pt-24 md:pt-28 pb-12 md:pb-16">
+    <div ref={containerRef} className="min-h-screen bg-gradient-to-b from-offWhite via-beige-200/20 to-teal-400/10 pt-24 md:pt-28 pb-12 md:pb-16">
       <div className="section-padding max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -59,7 +59,7 @@ export default function ViewerPage() {
           </p>
         </motion.div>
 
-        <div className="viewer-canvas-wrap bg-white border border-black/5 rounded-2xl shadow-sm overflow-hidden mb-6">
+        <div className="viewer-canvas-wrap bg-white/90 border border-teal-400/20 rounded-2xl shadow-sm overflow-hidden mb-6">
           <div className="relative w-full" style={{ aspectRatio: '16 / 10' }}>
             <Canvas
               camera={{ position: [0, 1.8, 3.5], fov: 28 }}
@@ -67,7 +67,7 @@ export default function ViewerPage() {
               gl={{ antialias: true, alpha: false, outputColorSpace: 'srgb' }}
               shadows
               onCreated={({ gl }) => {
-                gl.setClearColor('#f5f5f5');
+                gl.setClearColor('#F6F4F1');
                 gl.toneMapping = 3;
                 gl.toneMappingExposure = 1.1;
               }}
@@ -93,9 +93,9 @@ export default function ViewerPage() {
             { icon: '⟳', label: 'Auto Rotate', desc: autoRotate ? 'Active' : 'Paused' },
             { icon: '◻', label: 'Studio Lighting', desc: 'Professional setup' },
           ].map((ctrl) => (
-            <div key={ctrl.label} className="bg-white border border-black/5 rounded-xl p-3 md:p-4 text-center">
-              <p className="text-sm mb-1 text-dark-400">{ctrl.icon}</p>
-              <p className="text-[11px] font-semibold text-dark-700 uppercase tracking-wider">{ctrl.label}</p>
+            <div key={ctrl.label} className="bg-white/80 border border-teal-400/20 rounded-xl p-3 md:p-4 text-center backdrop-blur-sm">
+              <p className="text-sm mb-1 text-teal-400">{ctrl.icon}</p>
+              <p className="text-[11px] font-semibold text-charcoal-800 uppercase tracking-wider">{ctrl.label}</p>
               <p className="text-[9px] text-dark-500 mt-0.5">{ctrl.desc}</p>
             </div>
           ))}
@@ -106,7 +106,7 @@ export default function ViewerPage() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => setAutoRotate(!autoRotate)}
-            className="flex-1 py-3 rounded-xl bg-black text-white text-sm font-medium tracking-wider uppercase hover:bg-dark-800 transition-all"
+            className="flex-1 py-3 rounded-xl bg-charcoal-800 text-white text-sm font-medium tracking-wider uppercase hover:bg-charcoal-900 transition-all"
           >
             {autoRotate ? 'Pause Rotation' : 'Resume Rotation'}
           </motion.button>
@@ -114,7 +114,7 @@ export default function ViewerPage() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => window.location.reload()}
-            className="flex-1 py-3 rounded-xl bg-white border border-black/10 text-dark-700 text-sm font-medium tracking-wider uppercase hover:bg-dark-50 hover:border-black/20 transition-all"
+            className="flex-1 py-3 rounded-xl bg-white/80 border border-teal-400/20 text-charcoal-700 text-sm font-medium tracking-wider uppercase hover:bg-white hover:border-teal-400/30 transition-all"
           >
             Reset View
           </motion.button>
@@ -130,7 +130,7 @@ export default function ViewerPage() {
                 link.click();
               }
             }}
-            className="flex-1 py-3 rounded-xl bg-white border border-black/10 text-dark-700 text-sm font-medium tracking-wider uppercase hover:bg-dark-50 hover:border-black/20 transition-all"
+            className="flex-1 py-3 rounded-xl bg-white/80 border border-teal-400/20 text-charcoal-700 text-sm font-medium tracking-wider uppercase hover:bg-white hover:border-teal-400/30 transition-all"
           >
             Screenshot
           </motion.button>

@@ -50,10 +50,10 @@ export default function DesignStudioPage() {
     console.log('Design submitted:', formData);
   };
 
-  const formSectionClass = 'form-section bg-white border border-black/5 shadow-sm p-8 rounded-2xl';
+  const formSectionClass = 'form-section bg-white/90 backdrop-blur-sm border border-teal-400/15 shadow-sm p-8 rounded-2xl';
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-luxury-bg pt-32 pb-16">
+    <div ref={containerRef} className="min-h-screen bg-gradient-to-b from-offWhite via-beige-200/20 to-skyBlue-200/15 pt-32 pb-16">
       <div className="section-padding max-w-4xl mx-auto">
         {/* Header */}
         <motion.div

@@ -57,9 +57,8 @@ export default function ThreeDVisualization() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-luxury-bg py-16 md:py-20"
+      className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-gradient-to-b from-beige-200/20 via-skyBlue-200/20 to-offWhite py-16 md:py-20"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-white via-luxury-bg to-white" />
       <ThreeDBackground variant="boxes" />
 
       <div className="relative z-10 max-w-6xl mx-auto px-6 w-full">

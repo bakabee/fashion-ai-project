@@ -66,10 +66,9 @@ export default function SketchInspirationWall() {
   return (
     <section
       ref={containerRef}
-      className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-white"
+      className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-gradient-to-b from-offWhite via-teal-400/10 to-beige-200/20"
     >
       <ThreeDBackground variant="knots" />
-      <div className="absolute inset-0 bg-gradient-to-b from-luxury-bg via-white to-luxury-bg" />
 
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {collageItems.map((item, i) => (

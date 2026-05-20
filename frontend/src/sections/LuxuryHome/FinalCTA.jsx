@@ -44,7 +44,7 @@ export default function FinalCTA() {
   return (
     <section
       ref={containerRef}
-      className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-gradient-to-b from-luxury-surface via-white to-white"
+      className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-gradient-to-b from-teal-400/10 via-beige-200/15 to-skyBlue-200/20"
     >
       <ThreeDBackground variant="stars" />
       <div className="absolute inset-0 pointer-events-none">

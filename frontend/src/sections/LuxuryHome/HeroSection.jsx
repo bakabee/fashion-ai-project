@@ -49,7 +49,7 @@ export default function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-gradient-to-b from-white via-luxury-bg to-luxury-surface"
+      className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-gradient-to-b from-offWhite via-beige-200/30 to-teal-400/20"
     >
       <ThreeDBackground variant="orbs" />
 
@@ -132,7 +132,7 @@ export default function HeroSection() {
                 alt="AI Fashion Design Studio"
                 className="w-full h-auto object-contain relative z-10"
               />
-              <div className="absolute -bottom-3 -right-3 bg-white/90 backdrop-blur-sm border border-black/5 px-3 py-2 z-20 shadow-sm">
+              <div className="absolute -bottom-3 -right-3 bg-white/90 backdrop-blur-sm border border-teal-400/20 px-3 py-2 z-20 shadow-sm">
                 <p className="text-[8px] tracking-[0.2em] uppercase text-dark-500">Collection</p>
                 <p className="text-xs font-medium text-dark-700">Spring/Summer 2026</p>
               </div>
