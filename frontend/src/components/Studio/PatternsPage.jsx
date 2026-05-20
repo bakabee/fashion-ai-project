@@ -80,22 +80,22 @@ export default function PatternsPage() {
           {patternSections.map((section, index) => (
             <motion.div
               key={section.title}
-              className="pattern-card bg-white border border-black/5 shadow-sm rounded-2xl p-8"
+              className="pattern-card bg-white/90 backdrop-blur-sm border border-teal-400/15 shadow-sm rounded-2xl p-8"
               whileHover={{ scale: 1.02 }}
             >
               {/* Header */}
-              <div className="flex items-start gap-4 mb-6">
-                <div className="text-5xl">{section.icon}</div>
-                <div className="flex-1">
-                  <h2 className="text-2xl font-bold text-dark-800">{section.title}</h2>
-                  <p className="text-dark-400 mt-1">{section.description}</p>
+              <div className="mb-6">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="w-6 h-px bg-teal-400/40" />
+                  <span className="text-[9px] tracking-[0.2em] uppercase text-teal-500 font-medium">Panel</span>
                 </div>
+                <h2 className="text-2xl font-bold text-charcoal-800">{section.title}</h2>
+                <p className="text-dark-400 mt-1">{section.description}</p>
               </div>
 
               {/* Pattern Diagram Placeholder */}
-              <div className="bg-gradient-to-br from-dark-50 to-dark-100 rounded-lg h-48 mb-6 flex items-center justify-center border border-black/5">
+              <div className="bg-gradient-to-br from-teal-400/5 via-beige-200/20 to-skyBlue-200/10 rounded-lg h-48 mb-6 flex items-center justify-center border border-teal-400/10">
                 <div className="text-center">
-                  <div className="text-6xl mb-2">{section.icon}</div>
                   <p className="text-dark-400 text-sm">2D Pattern Diagram</p>
                 </div>
               </div>
@@ -111,7 +111,7 @@ export default function PatternsPage() {
                     transition={{ delay: stepIndex * 0.1 }}
                     className="flex items-start gap-3"
                   >
-                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-dark-800 flex items-center justify-center text-xs font-bold text-white">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-charcoal-800 flex items-center justify-center text-xs font-bold text-white">
                       {stepIndex + 1}
                     </div>
                     <p className="text-dark-600 pt-0.5">{step}</p>
@@ -123,7 +123,7 @@ export default function PatternsPage() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="w-full mt-6 py-3 rounded-lg bg-dark-800 text-white font-semibold transition-all hover:bg-dark-900"
+                className="w-full mt-6 py-3 rounded-lg bg-charcoal-800 text-white font-semibold transition-all hover:bg-charcoal-900"
               >
                 Download PDF
               </motion.button>
@@ -135,17 +135,17 @@ export default function PatternsPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          className="bg-white border border-black/5 shadow-sm rounded-2xl p-12"
+          className="bg-white/90 backdrop-blur-sm border border-teal-400/15 shadow-sm rounded-2xl p-12"
         >
-          <h2 className="text-3xl font-bold text-dark-800 mb-6 flex items-center gap-3">
-            <span>🪡</span> Assembly Guide
+          <h2 className="text-3xl font-bold text-charcoal-800 mb-6">
+            Assembly Guide
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
             {['Prepare', 'Attach Sleeves', 'Add Collar', 'Final Stitching'].map(
               (stage, index) => (
                 <div key={stage} className="text-center">
-                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-dark-800 text-white font-bold mb-3">
+                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-charcoal-800 text-white font-bold mb-3">
                     {index + 1}
                   </div>
                   <p className="text-dark-800 font-semibold">{stage}</p>
@@ -167,7 +167,7 @@ export default function PatternsPage() {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="mt-8 py-4 px-8 rounded-xl bg-black text-white font-bold transition-all hover:bg-dark-800"
+            className="mt-8 py-4 px-8 rounded-xl bg-charcoal-800 text-white font-bold transition-all hover:bg-charcoal-900"
           >
             Download Full Guide
           </motion.button>
