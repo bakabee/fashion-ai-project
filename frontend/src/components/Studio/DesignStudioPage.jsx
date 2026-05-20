@@ -61,7 +61,7 @@ export default function DesignStudioPage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-12"
         >
-          <h1 className="font-display text-5xl md:text-6xl font-bold text-dark-800 mb-4">
+          <h1 className="font-display text-5xl md:text-6xl font-bold text-charcoal-800 mb-4">
             Design Studio
           </h1>
           <p className="text-dark-500 text-lg">

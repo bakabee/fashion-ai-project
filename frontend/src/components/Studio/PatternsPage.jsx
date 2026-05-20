@@ -6,7 +6,6 @@ const patternSections = [
   {
     title: 'Front Panel',
     description: 'Main front piece of the garment',
-    icon: '□',
     steps: [
       'Measure from shoulder to hem',
       'Mark key reference points',
@@ -16,7 +15,6 @@ const patternSections = [
   {
     title: 'Back Panel',
     description: 'Supporting back structure',
-    icon: '◇',
     steps: [
       'Mirror front panel measurements',
       'Add seam allowances',
@@ -26,7 +24,6 @@ const patternSections = [
   {
     title: 'Sleeves',
     description: 'Arm coverage pieces',
-    icon: '◆',
     steps: [
       'Calculate circumference',
       'Add ease for movement',
@@ -36,7 +33,6 @@ const patternSections = [
   {
     title: 'Collar',
     description: 'Neckline finishing',
-    icon: '◠',
     steps: [
       'Measure neckline',
       'Cut facing pieces',
