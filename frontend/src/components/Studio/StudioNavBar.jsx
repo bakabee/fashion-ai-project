@@ -20,13 +20,13 @@ export default function StudioNavBar() {
   return (
     <>
       {/* Desktop Navigation */}
-      <nav className="hidden md:flex fixed top-0 left-0 right-0 h-20 bg-luxury-surface/80 backdrop-blur-lg border-b border-white/10 z-50">
+      <nav className="hidden md:flex fixed top-0 left-0 right-0 h-20 bg-white/80 backdrop-blur-lg border-b border-black/5 z-50">
         <div className="w-full flex items-center justify-between px-8">
           {/* Logo */}
           <motion.button
             whileHover={{ scale: 1.05 }}
             onClick={() => navigate('/')}
-            className="text-2xl font-bold text-white font-display"
+            className="text-2xl font-bold text-dark-800 font-display"
           >
             AI Fashion
           </motion.button>
@@ -39,14 +39,14 @@ export default function StudioNavBar() {
                 whileHover={{ scale: 1.05 }}
                 onClick={() => navigate(item.path)}
                 className={`relative px-4 py-2 text-sm font-medium transition-colors ${
-                  isActive(item.path) ? 'text-fashionPurple' : 'text-gray-300 hover:text-white'
+                  isActive(item.path) ? 'text-dark-800' : 'text-dark-400 hover:text-dark-600'
                 }`}
               >
                 {item.label}
                 {isActive(item.path) && (
                   <motion.div
                     layoutId="navbar-underline"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-fashionPurple to-fashionPink"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-dark-800"
                   />
                 )}
               </motion.button>
@@ -58,7 +58,7 @@ export default function StudioNavBar() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate('/')}
-            className="btn-glass text-sm px-6 py-2"
+            className="px-6 py-2 text-sm font-medium text-dark-600 border border-black/10 rounded-lg hover:bg-dark-50 hover:border-black/20 transition-all"
           >
             Back Home
           </motion.button>
@@ -66,16 +66,16 @@ export default function StudioNavBar() {
       </nav>
 
       {/* Mobile Navigation */}
-      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-luxury-surface/80 backdrop-blur-lg border-b border-white/10 z-50 flex items-center justify-between px-4">
+      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white/80 backdrop-blur-lg border-b border-black/5 z-50 flex items-center justify-between px-4">
         <motion.button
           whileHover={{ scale: 1.05 }}
           onClick={() => navigate('/')}
-          className="text-xl font-bold text-white font-display"
+          className="text-xl font-bold text-dark-800 font-display"
         >
           AI Fashion
         </motion.button>
 
-        <button onClick={() => setIsOpen(!isOpen)} className="text-white">
+        <button onClick={() => setIsOpen(!isOpen)} className="text-dark-800">
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
@@ -83,7 +83,7 @@ export default function StudioNavBar() {
       {/* Mobile Menu */}
       <motion.div
         animate={{ opacity: isOpen ? 1 : 0, y: isOpen ? 0 : -10 }}
-        className={`md:hidden fixed top-16 left-0 right-0 bg-luxury-surface/90 backdrop-blur-lg border-b border-white/10 ${
+        className={`md:hidden fixed top-16 left-0 right-0 bg-white/90 backdrop-blur-lg border-b border-black/5 ${
           isOpen ? 'block' : 'pointer-events-none'
         }`}
       >
@@ -97,7 +97,7 @@ export default function StudioNavBar() {
                 setIsOpen(false);
               }}
               className={`px-4 py-2 text-sm font-medium transition-colors ${
-                isActive(item.path) ? 'text-fashionPurple' : 'text-gray-300 hover:text-white'
+                isActive(item.path) ? 'text-dark-800' : 'text-dark-400 hover:text-dark-600'
               }`}
             >
               {item.label}
@@ -109,7 +109,7 @@ export default function StudioNavBar() {
               navigate('/');
               setIsOpen(false);
             }}
-            className="btn-glass text-sm px-6 py-2"
+            className="px-6 py-2 text-sm font-medium text-dark-600 border border-black/10 rounded-lg hover:bg-dark-50 transition-all"
           >
             Back Home
           </motion.button>
