@@ -52,10 +52,10 @@ export default function CatalogPage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-12"
         >
-          <h1 className="font-display text-5xl md:text-6xl font-bold text-white mb-4">
+          <h1 className="font-display text-5xl md:text-6xl font-bold text-dark-800 mb-4">
             Design Catalog
           </h1>
-          <p className="text-gray-400 text-lg">
+          <p className="text-dark-500 text-lg">
             Browse and explore our premium fashion designs
           </p>
         </motion.div>
@@ -73,8 +73,8 @@ export default function CatalogPage() {
             onClick={() => setSelectedCategory('all')}
             className={`px-6 py-3 rounded-lg font-semibold transition-all ${
               selectedCategory === 'all'
-                ? 'bg-gradient-to-r from-fashionPurple to-fashionPink text-white'
-                : 'glass-effect glass-hover text-gray-300'
+                ? 'bg-black text-white'
+                : 'bg-white border border-black/10 text-dark-600 hover:bg-dark-50 hover:border-black/20'
             }`}
           >
             All
@@ -88,8 +88,8 @@ export default function CatalogPage() {
               onClick={() => setSelectedCategory(cat.id)}
               className={`px-6 py-3 rounded-lg font-semibold transition-all flex items-center gap-2 ${
                 selectedCategory === cat.id
-                  ? 'bg-gradient-to-r from-fashionPurple to-fashionPink text-white'
-                  : 'glass-effect glass-hover text-gray-300'
+                  ? 'bg-black text-white'
+                  : 'bg-white border border-black/10 text-dark-600 hover:bg-dark-50 hover:border-black/20'
               }`}
             >
               <span>{cat.icon}</span>
@@ -110,18 +110,18 @@ export default function CatalogPage() {
               key={item.id}
               variants={itemVariants}
               whileHover={{ scale: 1.02 }}
-              className="glass-effect rounded-2xl overflow-hidden group cursor-pointer"
+              className="bg-white rounded-2xl overflow-hidden group cursor-pointer border border-black/5 shadow-sm hover:shadow-md transition-all duration-300"
             >
-              <div className="aspect-square bg-gradient-to-br from-fashionPurple/20 to-fashionPink/20 flex items-center justify-center text-7xl group-hover:scale-110 transition-transform duration-300">
+              <div className="aspect-square bg-gradient-to-br from-dark-100 to-dark-50 flex items-center justify-center text-7xl group-hover:scale-110 transition-transform duration-300">
                 {item.image}
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-bold text-white mb-2">{item.name}</h3>
-                <p className="text-gray-400 text-sm">{item.description}</p>
+                <h3 className="text-xl font-bold text-dark-800 mb-2">{item.name}</h3>
+                <p className="text-dark-400 text-sm">{item.description}</p>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="mt-4 w-full py-2 rounded-lg bg-gradient-to-r from-fashionPurple/30 to-fashionPink/30 hover:from-fashionPurple/50 hover:to-fashionPink/50 text-white font-semibold transition-all"
+                  className="mt-4 w-full py-2 rounded-lg bg-dark-800 text-white font-semibold hover:bg-dark-900 transition-all"
                 >
                   View Details
                 </motion.button>

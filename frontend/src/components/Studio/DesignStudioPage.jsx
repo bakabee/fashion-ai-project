@@ -50,7 +50,7 @@ export default function DesignStudioPage() {
     console.log('Design submitted:', formData);
   };
 
-  const formSectionClass = 'form-section glass-effect p-8 rounded-2xl backdrop-blur-xl';
+  const formSectionClass = 'form-section bg-white border border-black/5 shadow-sm p-8 rounded-2xl';
 
   return (
     <div ref={containerRef} className="min-h-screen bg-luxury-bg pt-32 pb-16">
@@ -61,10 +61,10 @@ export default function DesignStudioPage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-12"
         >
-          <h1 className="font-display text-5xl md:text-6xl font-bold text-white mb-4">
+          <h1 className="font-display text-5xl md:text-6xl font-bold text-dark-800 mb-4">
             Design Studio
           </h1>
-          <p className="text-gray-400 text-lg">
+          <p className="text-dark-500 text-lg">
             Create your custom fashion design with AI assistance
           </p>
         </motion.div>
@@ -73,7 +73,7 @@ export default function DesignStudioPage() {
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Fabric Selection */}
           <div className={formSectionClass}>
-            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+            <h2 className="text-2xl font-bold text-dark-800 mb-6 flex items-center gap-2">
               <span>✨</span> Fabric Selection
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -86,8 +86,8 @@ export default function DesignStudioPage() {
                   onClick={() => handleChange('fabricType', fabric)}
                   className={`p-4 rounded-lg capitalize font-semibold transition-all ${
                     formData.fabricType === fabric
-                      ? 'bg-gradient-to-r from-fashionPurple to-fashionPink text-white'
-                      : 'glass-effect glass-hover text-gray-300'
+                      ? 'bg-black text-white'
+                      : 'bg-white border border-black/10 text-dark-600 hover:bg-dark-50 hover:border-black/20'
                   }`}
                 >
                   {fabric}
@@ -98,7 +98,7 @@ export default function DesignStudioPage() {
 
           {/* Sleeve Design */}
           <div className={formSectionClass}>
-            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+            <h2 className="text-2xl font-bold text-dark-800 mb-6 flex items-center gap-2">
               <span>👕</span> Sleeve Design
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -111,8 +111,8 @@ export default function DesignStudioPage() {
                   onClick={() => handleChange('sleeveLength', sleeve)}
                   className={`p-4 rounded-lg capitalize font-semibold transition-all ${
                     formData.sleeveLength === sleeve
-                      ? 'bg-gradient-to-r from-fashionPurple to-fashionPink text-white'
-                      : 'glass-effect glass-hover text-gray-300'
+                      ? 'bg-black text-white'
+                      : 'bg-white border border-black/10 text-dark-600 hover:bg-dark-50 hover:border-black/20'
                   }`}
                 >
                   {sleeve}
@@ -123,7 +123,7 @@ export default function DesignStudioPage() {
 
           {/* Neck Design */}
           <div className={formSectionClass}>
-            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+            <h2 className="text-2xl font-bold text-dark-800 mb-6 flex items-center gap-2">
               <span>🎀</span> Neck Design
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -136,8 +136,8 @@ export default function DesignStudioPage() {
                   onClick={() => handleChange('neckType', neck)}
                   className={`p-4 rounded-lg capitalize font-semibold transition-all ${
                     formData.neckType === neck
-                      ? 'bg-gradient-to-r from-fashionPurple to-fashionPink text-white'
-                      : 'glass-effect glass-hover text-gray-300'
+                      ? 'bg-black text-white'
+                      : 'bg-white border border-black/10 text-dark-600 hover:bg-dark-50 hover:border-black/20'
                   }`}
                 >
                   {neck}
@@ -148,21 +148,21 @@ export default function DesignStudioPage() {
 
           {/* Color Picker */}
           <div className={formSectionClass}>
-            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+            <h2 className="text-2xl font-bold text-dark-800 mb-6 flex items-center gap-2">
               <span>🎨</span> Color
             </h2>
             <div className="flex items-center gap-6">
               <div className="flex-1">
-                <label className="block text-gray-300 mb-2">Select Color</label>
+                <label className="block text-dark-500 mb-2">Select Color</label>
                 <input
                   type="color"
                   value={formData.color}
                   onChange={(e) => handleChange('color', e.target.value)}
-                  className="w-full h-16 rounded-lg cursor-pointer border border-white/20"
+                  className="w-full h-16 rounded-lg cursor-pointer border border-black/20"
                 />
               </div>
               <div
-                className="w-32 h-32 rounded-lg border-4 border-white/20"
+                className="w-32 h-32 rounded-lg border-4 border-black/10"
                 style={{ backgroundColor: formData.color }}
               />
             </div>
@@ -170,19 +170,19 @@ export default function DesignStudioPage() {
 
           {/* Measurements */}
           <div className={formSectionClass}>
-            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+            <h2 className="text-2xl font-bold text-dark-800 mb-6 flex items-center gap-2">
               <span>📏</span> Body Measurements
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {['chest', 'waist', 'length'].map((field) => (
                 <div key={field}>
-                  <label className="block text-gray-300 mb-2 capitalize">{field} (cm)</label>
+                  <label className="block text-dark-500 mb-2 capitalize">{field} (cm)</label>
                   <input
                     type="number"
                     value={formData.measurements[field]}
                     onChange={(e) => handleMeasurementChange(field, e.target.value)}
                     placeholder={field}
-                    className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:border-fashionPurple outline-none transition-colors"
+                    className="w-full px-4 py-2 rounded-lg bg-white border border-black/10 text-dark-800 placeholder-dark-300 focus:border-dark-500 outline-none transition-colors"
                   />
                 </div>
               ))}
@@ -191,7 +191,7 @@ export default function DesignStudioPage() {
 
           {/* Style Description */}
           <div className={formSectionClass}>
-            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+            <h2 className="text-2xl font-bold text-dark-800 mb-6 flex items-center gap-2">
               <span>💬</span> Style Description
             </h2>
             <textarea
@@ -199,7 +199,7 @@ export default function DesignStudioPage() {
               onChange={(e) => handleChange('styleDescription', e.target.value)}
               placeholder="Describe your design vision... e.g., 'Modern minimalist with flowing lines, sustainable materials'"
               rows={5}
-              className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:border-fashionPurple outline-none transition-colors resize-none"
+              className="w-full px-4 py-3 rounded-lg bg-white border border-black/10 text-dark-800 placeholder-dark-300 focus:border-dark-500 outline-none transition-colors resize-none"
             />
           </div>
 
@@ -208,7 +208,7 @@ export default function DesignStudioPage() {
             type="submit"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="w-full py-4 rounded-xl bg-gradient-to-r from-fashionPurple to-fashionPink text-white font-bold text-lg transition-all hover:shadow-xl hover:shadow-fashionPurple/50"
+            className="w-full py-4 rounded-xl bg-black text-white font-bold text-lg transition-all hover:bg-dark-800"
           >
             Generate Design
           </motion.button>
