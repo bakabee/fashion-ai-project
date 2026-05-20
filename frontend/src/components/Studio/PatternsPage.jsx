@@ -59,7 +59,7 @@ export default function PatternsPage() {
   }, []);
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-luxury-bg pt-32 pb-16">
+    <div ref={containerRef} className="min-h-screen bg-gradient-to-b from-offWhite via-beige-200/20 to-teal-400/10 pt-32 pb-16">
       <div className="section-padding max-w-6xl mx-auto">
         {/* Header */}
         <motion.div
@@ -67,7 +67,7 @@ export default function PatternsPage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-12"
         >
-          <h1 className="font-display text-5xl md:text-6xl font-bold text-dark-800 mb-4">
+          <h1 className="font-display text-5xl md:text-6xl font-bold text-charcoal-800 mb-4">
             Pattern Guides
           </h1>
           <p className="text-dark-500 text-lg">
