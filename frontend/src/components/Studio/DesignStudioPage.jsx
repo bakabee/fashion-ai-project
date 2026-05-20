@@ -111,8 +111,8 @@ export default function DesignStudioPage() {
                   onClick={() => handleChange('sleeveLength', sleeve)}
                   className={`p-4 rounded-lg capitalize font-semibold transition-all ${
                     formData.sleeveLength === sleeve
-                      ? 'bg-black text-white'
-                      : 'bg-white border border-black/10 text-dark-600 hover:bg-dark-50 hover:border-black/20'
+                      ? 'bg-charcoal-800 text-white'
+                      : 'bg-white/80 border border-teal-400/20 text-dark-600 hover:bg-white hover:border-teal-400/30'
                   }`}
                 >
                   {sleeve}
@@ -136,8 +136,8 @@ export default function DesignStudioPage() {
                   onClick={() => handleChange('neckType', neck)}
                   className={`p-4 rounded-lg capitalize font-semibold transition-all ${
                     formData.neckType === neck
-                      ? 'bg-black text-white'
-                      : 'bg-white border border-black/10 text-dark-600 hover:bg-dark-50 hover:border-black/20'
+                      ? 'bg-charcoal-800 text-white'
+                      : 'bg-white/80 border border-teal-400/20 text-dark-600 hover:bg-white hover:border-teal-400/30'
                   }`}
                 >
                   {neck}
@@ -208,7 +208,7 @@ export default function DesignStudioPage() {
             type="submit"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="w-full py-4 rounded-xl bg-black text-white font-bold text-lg transition-all hover:bg-dark-800"
+            className="w-full py-4 rounded-xl bg-charcoal-800 text-white font-bold text-lg transition-all hover:bg-charcoal-900"
           >
             Generate Design
           </motion.button>
