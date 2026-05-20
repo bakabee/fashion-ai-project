@@ -74,7 +74,7 @@ export default function DesignStudioPage() {
           {/* Fabric Selection */}
           <div className={formSectionClass}>
             <h2 className="text-2xl font-bold text-dark-800 mb-6 flex items-center gap-2">
-              <span>✨</span> Fabric Selection
+              Fabric Selection
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {['cotton', 'silk', 'wool', 'linen'].map((fabric) => (
@@ -99,7 +99,7 @@ export default function DesignStudioPage() {
           {/* Sleeve Design */}
           <div className={formSectionClass}>
             <h2 className="text-2xl font-bold text-dark-800 mb-6 flex items-center gap-2">
-              <span>👕</span> Sleeve Design
+              Sleeve Design
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {['short', 'long', 'sleeveless'].map((sleeve) => (
@@ -124,7 +124,7 @@ export default function DesignStudioPage() {
           {/* Neck Design */}
           <div className={formSectionClass}>
             <h2 className="text-2xl font-bold text-dark-800 mb-6 flex items-center gap-2">
-              <span>🎀</span> Neck Design
+              Neck Design
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {['round', 'v-neck', 'collar'].map((neck) => (
@@ -149,7 +149,7 @@ export default function DesignStudioPage() {
           {/* Color Picker */}
           <div className={formSectionClass}>
             <h2 className="text-2xl font-bold text-dark-800 mb-6 flex items-center gap-2">
-              <span>🎨</span> Color
+              Color
             </h2>
             <div className="flex items-center gap-6">
               <div className="flex-1">
@@ -171,7 +171,7 @@ export default function DesignStudioPage() {
           {/* Measurements */}
           <div className={formSectionClass}>
             <h2 className="text-2xl font-bold text-dark-800 mb-6 flex items-center gap-2">
-              <span>📏</span> Body Measurements
+              Body Measurements
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {['chest', 'waist', 'length'].map((field) => (
@@ -192,7 +192,7 @@ export default function DesignStudioPage() {
           {/* Style Description */}
           <div className={formSectionClass}>
             <h2 className="text-2xl font-bold text-dark-800 mb-6 flex items-center gap-2">
-              <span>💬</span> Style Description
+              Style Description
             </h2>
             <textarea
               value={formData.styleDescription}
