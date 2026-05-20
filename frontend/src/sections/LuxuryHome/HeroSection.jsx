@@ -33,20 +33,13 @@ export default function HeroSection() {
 
       labelsRef.current.forEach((el, i) => {
         gsap.from(el, {
-          duration: 1.2,
-          opacity: 0,
-          x: i % 2 === 0 ? -30 : 30,
-          delay: 0.8 + i * 0.25,
-          ease: 'power2.out',
+          duration: 1.2, opacity: 0, x: i % 2 === 0 ? -30 : 30,
+          delay: 0.8 + i * 0.25, ease: 'power2.out',
         });
       });
 
       gsap.to(imageRef.current, {
-        y: -10,
-        duration: 5,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
+        y: -10, duration: 5, repeat: -1, yoyo: true, ease: 'sine.inOut',
       });
     }, containerRef);
 
@@ -58,7 +51,7 @@ export default function HeroSection() {
       ref={containerRef}
       className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-gradient-to-b from-white via-luxury-bg to-luxury-surface"
     >
-      <ThreeDBackground />
+      <ThreeDBackground variant="orbs" />
 
       <div className="absolute inset-0 pointer-events-none z-[1]">
         <div className="absolute top-1/3 left-1/4 w-[300px] h-[300px] bg-black/[0.015] rounded-full blur-3xl" />
@@ -67,7 +60,6 @@ export default function HeroSection() {
         <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-white/90 to-transparent" />
       </div>
 
-      {/* Floating Pinterest-style badges */}
       {floatingLabels.map((label, i) => (
         <div
           key={label.text}
@@ -85,9 +77,8 @@ export default function HeroSection() {
 
       <div className="relative z-10 flex flex-col items-center justify-center max-w-6xl mx-auto px-6 w-full">
         <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-20 w-full justify-center">
-          {/* Left: Text */}
           <div className="flex-1 max-w-lg text-center lg:text-right order-2 lg:order-1">
-            <p className="text-[10px] tracking-[0.3em] uppercase text-dark-400 mb-4 font-medium">
+            <p className="text-[10px] tracking-[0.3em] uppercase text-dark-500 mb-4 font-medium">
               Fashion Intelligence Platform
             </p>
 
@@ -97,12 +88,12 @@ export default function HeroSection() {
             >
               AI Fashion
               <br />
-              <span className="text-dark-400 font-light italic">Design Studio</span>
+              <span className="text-dark-500 font-light italic">Design Studio</span>
             </h1>
 
             <p
               ref={subtitleRef}
-              className="mt-6 text-base md:text-lg text-dark-500 font-light leading-relaxed max-w-sm mx-auto lg:ml-auto"
+              className="mt-6 text-base md:text-lg text-dark-600 font-light leading-relaxed max-w-sm mx-auto lg:ml-auto"
             >
               Where sketches become wearable fashion. From concept to creation — your complete AI-powered atelier.
             </p>
@@ -126,13 +117,12 @@ export default function HeroSection() {
               ].map((stat) => (
                 <div key={stat.label} className="text-center">
                   <p className="font-display text-xl font-bold text-dark-800">{stat.number}</p>
-                  <p className="text-[10px] tracking-[0.15em] uppercase text-dark-400 mt-1">{stat.label}</p>
+                  <p className="text-[10px] tracking-[0.15em] uppercase text-dark-500 mt-1">{stat.label}</p>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Right: Image */}
           <div ref={imageRef} className="flex-shrink-0 w-48 sm:w-56 md:w-72 lg:w-96 order-1 lg:order-2">
             <div className="relative">
               <div className="absolute -inset-8 bg-black/[0.02] rounded-full blur-3xl" />
@@ -143,7 +133,7 @@ export default function HeroSection() {
                 className="w-full h-auto object-contain relative z-10"
               />
               <div className="absolute -bottom-3 -right-3 bg-white/90 backdrop-blur-sm border border-black/5 px-3 py-2 z-20 shadow-sm">
-                <p className="text-[8px] tracking-[0.2em] uppercase text-dark-400">Collection</p>
+                <p className="text-[8px] tracking-[0.2em] uppercase text-dark-500">Collection</p>
                 <p className="text-xs font-medium text-dark-700">Spring/Summer 2026</p>
               </div>
             </div>
