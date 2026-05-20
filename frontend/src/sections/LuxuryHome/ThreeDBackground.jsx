@@ -195,6 +195,7 @@ const variants = {
   boxes: FloatingBoxes,
   rings: FloatingRings,
   blobs: FloatingBlobs,
+  stars: FloatingStars,
 };
 
 export default function ThreeDBackground({ variant = 'orbs' }) {
