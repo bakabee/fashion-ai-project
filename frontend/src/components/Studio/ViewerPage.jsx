@@ -1,4 +1,4 @@
-import { Suspense, useRef, useState, useEffect } from 'react';
+import { Suspense, useRef, useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Canvas } from '@react-three/fiber';
@@ -11,8 +11,40 @@ const clothingItems = [
   { id: 'top2', name: 'Top 2', image: '/images/top2.png' },
   { id: 'top3', name: 'Top 3', image: '/images/top3.jpg' },
   { id: 'shorts', name: 'Shorts', image: '/images/shorts.jpg' },
-  { id: 'sleeveless', name: 'Sleeveless Sweater', image: '/images/ea5f01f0ac1fcd13e8be1ed74f18678a.jpg' },
+  { id: 'sleeveless', name: 'Sleeveless Sweater', image: '/images/sleevelesssweater.jpg' },
   { id: 'sleeved', name: 'Sleeved Sweater', image: '/images/sleevedsweater.jpg' },
+];
+
+const colorPalettes = [
+  {
+    label: 'Neutral',
+    colors: [
+      { name: 'Black', hex: '#1A1A1A' },
+      { name: 'White', hex: '#FFFFFF' },
+      { name: 'Cream', hex: '#F5F0EB' },
+      { name: 'Beige', hex: '#E8DCCB' },
+      { name: 'Charcoal', hex: '#2B2B2B' },
+    ],
+  },
+  {
+    label: 'Pastel',
+    colors: [
+      { name: 'Sky Blue', hex: '#A7C7E7' },
+      { name: 'Blush Pink', hex: '#D4A5A5' },
+      { name: 'Lavender', hex: '#C3B1E1' },
+      { name: 'Mint', hex: '#A8D5BA' },
+    ],
+  },
+  {
+    label: 'Luxury',
+    colors: [
+      { name: 'Teal', hex: '#5DA9A6' },
+      { name: 'Emerald', hex: '#2E8B57' },
+      { name: 'Navy', hex: '#1C2D3D' },
+      { name: 'Wine Red', hex: '#6E2C3D' },
+      { name: 'Gold', hex: '#C4A35A' },
+    ],
+  },
 ];
 
 function Loader() {
@@ -33,19 +65,26 @@ export default function ViewerPage() {
   const containerRef = useRef(null);
   const headerRef = useRef(null);
   const controlsRef = useRef(null);
+  const paletteRef = useRef(null);
   const navRef = useRef(null);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const modelId = searchParams.get('model') || 'top1';
   const [autoRotate, setAutoRotate] = useState(true);
+  const [clothingColor, setClothingColor] = useState(null);
   const currentItem = clothingItems.find((i) => i.id === modelId) || clothingItems[0];
+
+  useEffect(() => {
+    setClothingColor(null);
+  }, [modelId]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.from(headerRef.current, { duration: 0.8, y: 50, opacity: 0, ease: 'power3.out' });
       gsap.from('.viewer-canvas-wrap', { duration: 1, y: 60, opacity: 0, ease: 'power3.out', delay: 0.15 });
       gsap.from(controlsRef.current?.children || [], { duration: 0.8, y: 40, opacity: 0, stagger: 0.08, ease: 'power3.out', delay: 0.3 });
-      gsap.from(navRef.current?.children || [], { duration: 0.8, y: 30, opacity: 0, stagger: 0.05, ease: 'power3.out', delay: 0.5 });
+      gsap.from(paletteRef.current, { duration: 0.8, y: 30, opacity: 0, ease: 'power3.out', delay: 0.45 });
+      gsap.from(navRef.current?.children || [], { duration: 0.8, y: 30, opacity: 0, stagger: 0.05, ease: 'power3.out', delay: 0.6 });
     }, containerRef);
     return () => ctx.revert();
   }, []);
@@ -76,7 +115,7 @@ export default function ViewerPage() {
         <div className="viewer-canvas-wrap bg-white/90 border border-teal-400/20 rounded-2xl shadow-sm overflow-hidden mb-4">
           <div className="relative w-full" style={{ aspectRatio: '16 / 10' }}>
             <Canvas
-              camera={{ position: [0, 1.8, 4.5], fov: 28 }}
+              camera={{ position: [0, 1.2, 4.5], fov: 28 }}
               dpr={[1, 1.5]}
               gl={{ antialias: true, alpha: false, outputColorSpace: 'srgb' }}
               shadows
@@ -87,7 +126,7 @@ export default function ViewerPage() {
               }}
             >
               <Suspense fallback={<Loader />}>
-                <FashionScene autoRotate={autoRotate} modelId={modelId} />
+                <FashionScene autoRotate={autoRotate} modelId={modelId} clothingColor={clothingColor} />
               </Suspense>
             </Canvas>
           </div>
@@ -133,6 +172,56 @@ export default function ViewerPage() {
           >
             Screenshot
           </motion.button>
+        </div>
+
+        <div ref={paletteRef} className="mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <p className="text-[10px] tracking-[0.2em] uppercase text-dark-500 font-medium">
+              Clothing Color
+            </p>
+            {clothingColor && (
+              <motion.button
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
+                onClick={() => setClothingColor(null)}
+                className="text-[9px] tracking-wider uppercase text-dark-400 hover:text-dark-600 transition-colors px-3 py-1 rounded-lg border border-teal-400/15 hover:border-teal-400/30"
+              >
+                Reset
+              </motion.button>
+            )}
+          </div>
+          <div className="space-y-4">
+            {colorPalettes.map((group) => (
+              <div key={group.label}>
+                <p className="text-[9px] tracking-[0.15em] uppercase text-dark-400 mb-2.5">
+                  {group.label}
+                </p>
+                <div className="flex flex-wrap gap-2.5">
+                  {group.colors.map((swatch) => (
+                    <motion.button
+                      key={swatch.hex}
+                      whileHover={{ scale: 1.12, y: -2 }}
+                      whileTap={{ scale: 0.92 }}
+                      onClick={() => setClothingColor(swatch.hex)}
+                      className="flex flex-col items-center gap-1.5"
+                    >
+                      <div
+                        className={`w-8 h-8 md:w-9 md:h-9 rounded-full border-2 transition-all ${
+                          clothingColor === swatch.hex
+                            ? 'border-charcoal-800 shadow-lg scale-110'
+                            : 'border-teal-400/20 hover:border-teal-400/40'
+                        }`}
+                        style={{ backgroundColor: swatch.hex }}
+                      />
+                      <span className="text-[7px] tracking-wide text-dark-400 text-center leading-tight">
+                        {swatch.name}
+                      </span>
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div ref={navRef}>

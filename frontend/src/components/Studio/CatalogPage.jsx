@@ -23,7 +23,7 @@ const categoryGroups = [
     id: 'sweaters',
     label: 'Sweaters',
     items: [
-      { id: 'sleeveless', name: 'Sleeveless Sweater', image: '/images/ea5f01f0ac1fcd13e8be1ed74f18678a.jpg', description: 'Fine-gauge sleeveless knit' },
+      { id: 'sleeveless', name: 'Sleeveless Sweater', image: '/images/sleevelesssweater.jpg', description: 'Fine-gauge sleeveless knit' },
       { id: 'sleeved', name: 'Sleeved Sweater', image: '/images/sleevedsweater.jpg', description: 'Mid-weight sweater with ribbed cuffs' },
     ],
   },
@@ -114,17 +114,17 @@ export default function CatalogPage() {
               whileHover={{ y: -8, scale: 1.01 }}
               className="bg-white/90 backdrop-blur-sm rounded-2xl overflow-hidden group border border-teal-400/15 shadow-sm hover:shadow-2xl transition-all duration-500"
             >
-              <div className="aspect-[4/5] overflow-hidden relative bg-gradient-to-br from-teal-400/5 via-beige-200/20 to-skyBlue-200/15">
+              <div className="aspect-[3/4] overflow-hidden relative bg-gradient-to-br from-teal-400/5 via-beige-200/20 to-skyBlue-200/15">
                 <img
                   src={item.image}
                   alt={item.name}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-charcoal-800/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               </div>
-              <div className="p-6">
-                <h3 className="text-lg font-bold text-charcoal-800 mb-1.5">{item.name}</h3>
-                <p className="text-dark-400 text-sm leading-relaxed mb-4">{item.description}</p>
+              <div className="p-4">
+                <h3 className="text-base font-bold text-charcoal-800 mb-1">{item.name}</h3>
+                <p className="text-dark-400 text-xs leading-relaxed mb-3">{item.description}</p>
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
