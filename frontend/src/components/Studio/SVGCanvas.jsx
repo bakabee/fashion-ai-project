@@ -10,20 +10,23 @@ export default function SVGCanvas({
   selectedBottom = null,
   selectedOnepiece = null,
 }) {
-  const [mannequinSVG, setMannequinSVG] = useState('');
-  const [selectedSVGs, setSelectedSVGs] = useState({});
+  const [svgs, setSvgs] = useState({
+    mannequin: null,
+    silhouette: null,
+    necklineFront: null,
+    necklineBack: null,
+    sleeve: null,
+    bottom: null,
+    onepiece: null,
+  });
+
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Load mannequin
-    fetch(mannequinPath)
-      .then(res => res.text())
-      .then(svg => setMannequinSVG(svg))
-      .catch(err => console.error('Error loading mannequin:', err));
-  }, [mannequinPath]);
-
-  useEffect(() => {
-    // Load selected SVG overlays
-    const toLoad = {};
+    setLoading(true);
+    const toLoad = {
+      mannequin: mannequinPath,
+    };
 
     if (selectedSilhouette) toLoad.silhouette = selectedSilhouette;
     if (selectedNecklineFront) toLoad.necklineFront = selectedNecklineFront;
@@ -36,125 +39,144 @@ export default function SVGCanvas({
       Object.entries(toLoad).map(([key, path]) =>
         fetch(path)
           .then(res => res.text())
-          .then(svg => ({ key, svg }))
-          .catch(() => ({ key, svg: '' }))
+          .then(svgContent => {
+            console.log(`Loaded ${key}:`, path);
+            return { key, data: svgContent };
+          })
+          .catch(err => {
+            console.error(`Error loading ${key}:`, err);
+            return { key, data: null };
+          })
       )
     ).then(results => {
-      const newSVGs = {};
-      results.forEach(({ key, svg }) => {
-        if (svg) newSVGs[key] = svg;
+      const newSvgs = { ...svgs };
+      results.forEach(({ key, data }) => {
+        if (data) newSvgs[key] = data;
+        else newSvgs[key] = null;
       });
-      setSelectedSVGs(newSVGs);
+      setSvgs(newSvgs);
+      setLoading(false);
     });
-  }, [selectedSilhouette, selectedNecklineFront, selectedNecklineBack, selectedSleeve, selectedBottom, selectedOnepiece]);
+  }, [selectedSilhouette, selectedNecklineFront, selectedNecklineBack, selectedSleeve, selectedBottom, selectedOnepiece, mannequinPath]);
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="flex-1 flex items-center justify-center p-8 bg-gradient-to-br from-luxury-surface to-beige-50/30 border-l border-teal-400/15 rounded-2xl"
+      className="flex-1 flex items-center justify-center p-8 bg-gradient-to-br from-beige-50 via-skyBlue-50/20 to-beige-100/30 rounded-2xl"
     >
-      <div className="relative w-full max-w-md aspect-[2/3] bg-white/50 backdrop-blur-sm border border-teal-400/15 rounded-2xl shadow-lg overflow-hidden">
+      <div className="relative w-full max-w-sm aspect-[2/3] bg-white shadow-2xl rounded-2xl overflow-hidden border border-teal-400/10">
         {/* Mannequin Base */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          {mannequinSVG ? (
-            <div
+        {svgs.mannequin && (
+          <div className="absolute inset-0">
+            <svg
+              viewBox="0 0 512 512"
               className="w-full h-full"
-              dangerouslySetInnerHTML={{ __html: mannequinSVG }}
+              dangerouslySetInnerHTML={{ __html: svgs.mannequin }}
             />
-          ) : (
-            <div className="text-dark-400 text-sm">Loading mannequin...</div>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Silhouette Overlay */}
-        {selectedSVGs.silhouette && (
+        {svgs.silhouette && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.4 }}
-            className="absolute inset-0 flex items-center justify-center pointer-events-none"
+            transition={{ duration: 0.3 }}
+            className="absolute inset-0"
           >
-            <div
+            <svg
+              viewBox="0 0 512 512"
               className="w-full h-full"
-              dangerouslySetInnerHTML={{ __html: selectedSVGs.silhouette }}
+              dangerouslySetInnerHTML={{ __html: svgs.silhouette }}
             />
           </motion.div>
         )}
 
         {/* Neckline Front Overlay */}
-        {selectedSVGs.necklineFront && (
+        {svgs.necklineFront && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: 0.1 }}
-            className="absolute inset-0 flex items-center justify-center pointer-events-none"
+            className="absolute inset-0"
           >
-            <div
+            <svg
+              viewBox="0 0 512 512"
               className="w-full h-full"
-              dangerouslySetInnerHTML={{ __html: selectedSVGs.necklineFront }}
+              dangerouslySetInnerHTML={{ __html: svgs.necklineFront }}
             />
           </motion.div>
         )}
 
         {/* Neckline Back Overlay */}
-        {selectedSVGs.necklineBack && (
+        {svgs.necklineBack && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: 0.15 }}
-            className="absolute inset-0 flex items-center justify-center pointer-events-none"
+            className="absolute inset-0"
           >
-            <div
+            <svg
+              viewBox="0 0 512 512"
               className="w-full h-full"
-              dangerouslySetInnerHTML={{ __html: selectedSVGs.necklineBack }}
+              dangerouslySetInnerHTML={{ __html: svgs.necklineBack }}
             />
           </motion.div>
         )}
 
         {/* Sleeve Overlay */}
-        {selectedSVGs.sleeve && (
+        {svgs.sleeve && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: 0.2 }}
-            className="absolute inset-0 flex items-center justify-center pointer-events-none"
+            className="absolute inset-0"
           >
-            <div
+            <svg
+              viewBox="0 0 512 512"
               className="w-full h-full"
-              dangerouslySetInnerHTML={{ __html: selectedSVGs.sleeve }}
+              dangerouslySetInnerHTML={{ __html: svgs.sleeve }}
             />
           </motion.div>
         )}
 
         {/* Bottom Overlay */}
-        {selectedSVGs.bottom && (
+        {svgs.bottom && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: 0.25 }}
-            className="absolute inset-0 flex items-center justify-center pointer-events-none"
+            className="absolute inset-0"
           >
-            <div
+            <svg
+              viewBox="0 0 512 512"
               className="w-full h-full"
-              dangerouslySetInnerHTML={{ __html: selectedSVGs.bottom }}
+              dangerouslySetInnerHTML={{ __html: svgs.bottom }}
             />
           </motion.div>
         )}
 
         {/* One Piece Overlay */}
-        {selectedSVGs.onepiece && (
+        {svgs.onepiece && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: 0.25 }}
-            className="absolute inset-0 flex items-center justify-center pointer-events-none"
+            className="absolute inset-0"
           >
-            <div
+            <svg
+              viewBox="0 0 512 512"
               className="w-full h-full"
-              dangerouslySetInnerHTML={{ __html: selectedSVGs.onepiece }}
+              dangerouslySetInnerHTML={{ __html: svgs.onepiece }}
             />
           </motion.div>
+        )}
+
+        {loading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-white/50">
+            <div className="text-dark-400 text-sm">Loading...</div>
+          </div>
         )}
       </div>
     </motion.div>

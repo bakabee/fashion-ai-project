@@ -1,7 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import StudioNavBar from '../components/Studio/StudioNavBar';
-import CatalogPage from '../components/Studio/CatalogPage';
 import DesignStudioPage from '../components/Studio/DesignStudioPage';
 import ViewerPage from '../components/Studio/ViewerPage';
 import PatternsPage from '../components/Studio/PatternsPage';
@@ -27,8 +26,7 @@ export default function Studio() {
           transition={{ duration: 0.3 }}
         >
           <Routes>
-            <Route path="/" element={<CatalogPage />} />
-            <Route path="/catalog" element={<CatalogPage />} />
+            <Route path="/" element={<DesignStudioPage />} />
             <Route path="/design" element={<DesignStudioPage />} />
             <Route path="/viewer" element={<ViewerPage />} />
             <Route path="/patterns" element={<PatternsPage />} />
@@ -38,4 +36,5 @@ export default function Studio() {
     </div>
   );
 }
+
 
