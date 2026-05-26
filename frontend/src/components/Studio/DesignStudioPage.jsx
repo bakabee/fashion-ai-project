@@ -157,7 +157,7 @@ export default function DesignStudioPage() {
                 onClick={() => exportAsImage('png')}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-3 py-2.5 rounded-lg bg-skyBlue-400/80 text-white font-medium hover:bg-skyBlue-500 transition-all shadow-lg text-xs tracking-wide"
+                className="px-6 py-3 rounded-lg bg-skyBlue-400/80 text-white font-semibold hover:bg-skyBlue-500 transition-all shadow-lg text-sm tracking-wider"
                 title="Export PNG"
               >
                 PNG
@@ -166,7 +166,7 @@ export default function DesignStudioPage() {
                 onClick={() => exportAsImage('svg')}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-3 py-2.5 rounded-lg bg-teal-400/80 text-white font-medium hover:bg-teal-500 transition-all shadow-lg text-xs tracking-wide"
+                className="px-6 py-3 rounded-lg bg-teal-400/80 text-white font-semibold hover:bg-teal-500 transition-all shadow-lg text-sm tracking-wider"
                 title="Export SVG"
               >
                 SVG
@@ -174,7 +174,7 @@ export default function DesignStudioPage() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-3 py-2.5 rounded-lg bg-charcoal-800 text-white font-medium hover:bg-charcoal-900 transition-all shadow-lg text-xs tracking-wide"
+                className="px-6 py-3 rounded-lg bg-charcoal-800 text-white font-semibold hover:bg-charcoal-900 transition-all shadow-lg text-sm tracking-wider"
                 title="Save Design"
               >
                 Save
@@ -183,7 +183,7 @@ export default function DesignStudioPage() {
                 onClick={resetSelection}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-3 py-2.5 rounded-lg bg-white/80 border border-teal-400/15 text-charcoal-700 font-medium hover:bg-white hover:border-teal-400/30 transition-all text-xs tracking-wide"
+                className="px-6 py-3 rounded-lg bg-white/80 border border-teal-400/15 text-charcoal-700 font-semibold hover:bg-white hover:border-teal-400/30 transition-all text-sm tracking-wider"
                 title="Reset"
               >
                 Reset
