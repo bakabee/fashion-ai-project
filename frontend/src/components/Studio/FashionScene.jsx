@@ -3,17 +3,7 @@ import { useGLTF, Center, ContactShadows, Environment, OrbitControls, Bounds } f
 import { useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
-const MESH_GROUPS = {
-  body: ['Female_base'],
-  halfSleeves: ['halfsleeves'],
-  fullSleeves: ['full_fitted_sleeves001'],
-};
-
-const MODEL_PATHS = {
-  body: '/models/master.glb',
-  halfSleeves: '/models/half_sleeves.glb',
-  fullSleeves: '/models/fully_fitted_sleeves.glb',
-};
+const BODY_MESH_NAME = 'Female_base';
 
 function GradientBackground() {
   const { viewport } = useThree();
@@ -75,19 +65,10 @@ export default function FashionScene({
   const sceneGroupRef = useRef();
   const camera = useThree((s) => s.camera);
 
-  const bodySrc = useGLTF(MODEL_PATHS.body).scene;
-  const halfSrc = useGLTF(MODEL_PATHS.halfSleeves).scene;
-  const fullSrc = useGLTF(MODEL_PATHS.fullSleeves).scene;
+  const src = useGLTF('/models/master.glb').scene;
+  const cloned = useMemo(() => src.clone(), [src]);
 
-  const clonedBody = useMemo(() => bodySrc.clone(), [bodySrc]);
-  const clonedHalf = useMemo(() => halfSrc.clone(), [halfSrc]);
-  const clonedFull = useMemo(() => fullSrc.clone(), [fullSrc]);
-
-  const materialGroupsRef = useRef({
-    body: [],
-    halfSleeves: [],
-    fullSleeves: [],
-  });
+  const bodyMeshRef = useRef(null);
 
   useEffect(() => {
     if (camera) {
@@ -97,103 +78,40 @@ export default function FashionScene({
   }, [camera]);
 
   useEffect(() => {
-    const groups = { body: [], halfSleeves: [], fullSleeves: [] };
-
-    clonedBody.traverse((child) => {
+    let found = null;
+    cloned.traverse((child) => {
       if (!child.isMesh) return;
       child.material = Array.isArray(child.material)
         ? child.material.map(m => m.clone())
         : child.material.clone();
-      if (MESH_GROUPS.body.includes(child.name)) {
-        groups.body.push(child);
+      if (child.name === BODY_MESH_NAME) {
+        found = child;
       }
     });
-
-    clonedHalf.traverse((child) => {
-      if (!child.isMesh) return;
-      child.material = Array.isArray(child.material)
-        ? child.material.map(m => m.clone())
-        : child.material.clone();
-      if (MESH_GROUPS.halfSleeves.includes(child.name)) {
-        groups.halfSleeves.push(child);
-      }
-    });
-
-    clonedFull.traverse((child) => {
-      if (!child.isMesh) return;
-      child.material = Array.isArray(child.material)
-        ? child.material.map(m => m.clone())
-        : child.material.clone();
-      if (MESH_GROUPS.fullSleeves.includes(child.name)) {
-        groups.fullSleeves.push(child);
-      }
-    });
-
-    materialGroupsRef.current = groups;
-  }, [clonedBody, clonedHalf, clonedFull]);
+    bodyMeshRef.current = found;
+  }, [cloned]);
 
   useEffect(() => {
+    const mesh = bodyMeshRef.current;
+    if (!mesh) return;
     const bodyVisible = selectedBody === 'boat_bandeau';
-    const halfVisible = selectedSleeve === 'half_sleeve';
-    const fullVisible = selectedSleeve === 'full_sleeve';
-
-    materialGroupsRef.current.body.forEach((mesh) => {
-      mesh.visible = bodyVisible;
-    });
-
-    materialGroupsRef.current.halfSleeves.forEach((mesh) => {
-      mesh.visible = halfVisible;
-    });
-
-    materialGroupsRef.current.fullSleeves.forEach((mesh) => {
-      mesh.visible = fullVisible;
-    });
-  }, [selectedBody, selectedSleeve]);
+    mesh.visible = bodyVisible;
+  }, [selectedBody]);
 
   useEffect(() => {
+    const mesh = bodyMeshRef.current;
+    if (!mesh || !mesh.material) return;
     const bodyColor = topColor || clothingColor;
-    materialGroupsRef.current.body.forEach((mesh) => {
-      if (!mesh.material) return;
-      const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-      mats.forEach((m) => {
-        if (bodyColor) {
-          m.color.copy(new THREE.Color(bodyColor));
-        } else {
-          m.color.set('#ffffff');
-        }
-        m.needsUpdate = true;
-      });
+    const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+    mats.forEach((m) => {
+      if (bodyColor) {
+        m.color.copy(new THREE.Color(bodyColor));
+      } else {
+        m.color.set('#ffffff');
+      }
+      m.needsUpdate = true;
     });
-  }, [clonedBody, topColor, clothingColor]);
-
-  useEffect(() => {
-    const sleeveColorVal = sleeveColor || clothingColor;
-    materialGroupsRef.current.halfSleeves.forEach((mesh) => {
-      if (!mesh.material) return;
-      const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-      mats.forEach((m) => {
-        if (sleeveColorVal) {
-          m.color.copy(new THREE.Color(sleeveColorVal));
-        } else {
-          m.color.set('#ffffff');
-        }
-        m.needsUpdate = true;
-      });
-    });
-
-    materialGroupsRef.current.fullSleeves.forEach((mesh) => {
-      if (!mesh.material) return;
-      const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-      mats.forEach((m) => {
-        if (sleeveColorVal) {
-          m.color.copy(new THREE.Color(sleeveColorVal));
-        } else {
-          m.color.set('#ffffff');
-        }
-        m.needsUpdate = true;
-      });
-    });
-  }, [clonedHalf, clonedFull, sleeveColor, clothingColor]);
+  }, [cloned, topColor, clothingColor]);
 
   return (
     <>
@@ -235,9 +153,7 @@ export default function FashionScene({
       <Center center>
         <Bounds fit clip damping={6} margin={1.6}>
           <group ref={sceneGroupRef}>
-            <primitive object={clonedBody} scale={1} />
-            <primitive object={clonedHalf} scale={1} />
-            <primitive object={clonedFull} scale={1} />
+            <primitive object={cloned} scale={1} />
           </group>
         </Bounds>
       </Center>
