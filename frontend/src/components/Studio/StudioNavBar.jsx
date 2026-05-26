@@ -9,7 +9,6 @@ export default function StudioNavBar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
-    { label: 'Catalog', path: '/studio/catalog' },
     { label: 'Design Studio', path: '/studio/design' },
     { label: '3D Viewer', path: '/studio/viewer' },
     { label: 'Patterns', path: '/studio/patterns' },

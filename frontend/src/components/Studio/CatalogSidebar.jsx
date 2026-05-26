@@ -8,6 +8,7 @@ export default function CatalogSidebar({
   selectedItems = {},
 }) {
   const [openSections, setOpenSections] = useState({
+    topWithNecks: true,
     silhouettes: true,
     necklinesFront: false,
     necklinesBack: false,
@@ -15,6 +16,7 @@ export default function CatalogSidebar({
   });
 
   const [svgAssets, setSvgAssets] = useState({
+    topWithNecks: [],
     silhouettes: [],
     necklinesFront: [],
     necklinesBack: [],
@@ -24,6 +26,13 @@ export default function CatalogSidebar({
   const categoryConfig = {
     tops: {
       sections: [
+        { 
+          id: 'topWithNecks', 
+          label: 'Tops With Necks', 
+          folder: '/images/top with necks',
+          displayFolder: '/images/front neck',
+          combinedAssets: true 
+        },
         { id: 'silhouettes', label: 'Silhouettes', folder: '/images/silhoutes' },
         { id: 'necklinesFront', label: 'Front Necklines', folder: '/images/front neck' },
         { id: 'necklinesBack', label: 'Back Necklines', folder: '/images/back neck' },
@@ -74,9 +83,9 @@ export default function CatalogSidebar({
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.4 }}
-      className="w-full md:w-80 bg-white/80 backdrop-blur-sm border-r border-teal-400/15 rounded-2xl overflow-y-auto flex flex-col"
+      className="w-full md:w-96 bg-white/80 backdrop-blur-sm border-r border-teal-400/15 rounded-2xl flex flex-col overflow-hidden"
     >
-      <div className="sticky top-0 p-6 border-b border-teal-400/10 bg-white/90 backdrop-blur-sm">
+      <div className="sticky top-0 p-6 border-b border-teal-400/10 bg-white/90 backdrop-blur-sm z-20">
         <h2 className="text-lg font-bold text-charcoal-800 capitalize">
           {category === 'onepiece' ? 'One Piece' : category}
         </h2>
@@ -164,18 +173,90 @@ function CatalogItems({ section, sectionId, onSelect, isSelected }) {
           'full_fitted_sleeves.svg',
           'half_sleeves.svg',
           'puff_sleeves.svg',
+          'strip_sleeves.svg',
+        ],
+        '/images/top with necks': [
+          'boat_bandeau.svg',
+          'boat_fitted.svg',
+          'boat_poppium.svg',
+          'boat_tank.svg',
+          'boat_tshirt.svg',
+          'floratine_bandeau.svg',
+          'floratine_poppium.svg',
+          'florentine_fitted.svg',
+          'florentine_tank.svg',
+          'florentine_tshirt.svg',
+          'heart_bandeau.svg',
+          'heart_fitted.svg',
+          'heart_poppium.svg',
+          'heart_tank.svg',
+          'heart_tshirt.svg',
+          'round_bandeau.svg',
+          'round_fitted.svg',
+          'round_poppium.svg',
+          'round_tank.svg',
+          'round_tshirt.svg',
+          'scoop_bandeau.svg',
+          'scoop_fitted.svg',
+          'scoop_poppium.svg',
+          'scoop_tank.svg',
+          'scoop_tshirt.svg',
+          'sqaure_bandeau.svg',
+          'sqaure_fitted.svg',
+          'sqaure_poppium.svg',
+          'sqaure_tank.svg',
+          'sqaure_tshirt.svg',
+          'turtle_bandeau.svg',
+          'turtle_fitted.svg',
+          'turtle_poppium.svg',
+          'turtle_tank.svg',
+          'turtle_tshirt.svg',
+          'V_bandeau.svg',
+          'V_fitted.svg',
+          'V_poppium.svg',
+          'V_tank.svg',
+          'V_tshirt.svg',
         ],
       };
 
       const assets = assetMap[section.folder] || [];
-      setItems(assets.map(filename => ({
-        id: filename.replace('.svg', ''),
-        name: filename
-          .replace('.svg', '')
-          .replace(/_/g, ' ')
-          .replace(/\b\w/g, l => l.toUpperCase()),
-        path: `${section.folder}/${filename}`,
-      })));
+      
+      setItems(assets.map(filename => {
+        let displayPath = `${section.folder}/${filename}`;
+        
+        // For combined assets (tops with necks), map to front neck image for preview
+        if (section.folder === '/images/top with necks') {
+          const necklineNames = {
+            'boat_': 'boat_front_neck.svg',
+            'floratine_': 'florentine_front_neck.svg',
+            'florentine_': 'florentine_front_neck.svg',
+            'heart_': 'heart_front_neck.svg',
+            'round_': 'round_front_neck.svg',
+            'scoop_': 'scoop_front_neck.svg',
+            'sqaure_': 'sqaure_front_neck.svg',
+            'turtle_': 'turtle_front_neck.svg',
+            'V_': 'V_front_neck.svg',
+          };
+          
+          // Find matching front neck image
+          for (const [prefix, neckFile] of Object.entries(necklineNames)) {
+            if (filename.startsWith(prefix)) {
+              displayPath = `/images/front neck/${neckFile}`;
+              break;
+            }
+          }
+        }
+        
+        return {
+          id: filename.replace('.svg', ''),
+          name: filename
+            .replace('.svg', '')
+            .replace(/_/g, ' ')
+            .replace(/\b\w/g, l => l.toUpperCase()),
+          path: `${section.folder}/${filename}`,
+          displayPath,
+        };
+      }));
     } catch (error) {
       console.error('Error loading assets:', error);
     } finally {
@@ -192,29 +273,38 @@ function CatalogItems({ section, sectionId, onSelect, isSelected }) {
   }
 
   return (
-    <div className="space-y-2">
+    <div className="grid grid-cols-2 gap-3">
       {items.map(item => (
         <motion.button
           key={item.id}
           onClick={() => onSelect(sectionId, item.path)}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          className={`w-full p-3 rounded-lg text-left text-xs font-medium transition-all ${
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className={`relative rounded-lg overflow-hidden border-2 transition-all aspect-square flex flex-col items-center justify-center ${
             isSelected === item.path
-              ? 'bg-teal-400/20 border border-teal-400/40 text-teal-600'
-              : 'bg-beige-50/50 border border-teal-400/10 text-charcoal-700 hover:bg-beige-100/50 hover:border-teal-400/20'
+              ? 'bg-teal-400/20 border-teal-400/60'
+              : 'bg-white border-teal-400/15 hover:border-teal-400/30'
           }`}
         >
-          <div className="flex items-center gap-2">
-            <div
-              className={`w-4 h-4 rounded-sm border-2 transition-all ${
-                isSelected === item.path
-                  ? 'bg-teal-400 border-teal-400'
-                  : 'border-teal-400/30'
-              }`}
-            />
-            <span className="truncate">{item.name}</span>
+          {/* SVG Preview - use displayPath if available, otherwise use path */}
+          <img
+            src={item.displayPath || item.path}
+            alt={item.name}
+            className="w-full h-full object-contain p-2"
+            onError={(e) => {
+              e.target.style.display = 'none';
+            }}
+          />
+          
+          {/* Name Label */}
+          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent px-2 py-2 text-center">
+            <span className="text-[10px] font-semibold text-white truncate block">{item.name}</span>
           </div>
+
+          {/* Selection Indicator */}
+          {isSelected === item.path && (
+            <div className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-teal-400 border-2 border-white" />
+          )}
         </motion.button>
       ))}
     </div>

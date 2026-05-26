@@ -6,6 +6,7 @@ import SVGCanvas from './SVGCanvas';
 export default function DesignStudioPage() {
   const [activeCategory, setActiveCategory] = useState('tops');
   const [selectedItems, setSelectedItems] = useState({
+    topWithNecks: null,
     silhouettes: null,
     necklinesFront: null,
     necklinesBack: null,
@@ -29,6 +30,7 @@ export default function DesignStudioPage() {
 
   const clearSelection = () => {
     setSelectedItems({
+      topWithNecks: null,
       silhouettes: null,
       necklinesFront: null,
       necklinesBack: null,
@@ -88,10 +90,10 @@ export default function DesignStudioPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4, delay: 0.2 }}
-          className="flex flex-col lg:flex-row gap-6"
+          className="flex flex-col lg:flex-row gap-6 h-[calc(100vh-300px)]"
         >
-          {/* Sidebar */}
-          <div className="w-full lg:w-80 flex-shrink-0">
+          {/* Sidebar with own scrollbar */}
+          <div className="w-full lg:w-96 flex-shrink-0 h-full">
             <CatalogSidebar
               category={activeCategory}
               onSelect={handleComponentSelect}
@@ -100,9 +102,10 @@ export default function DesignStudioPage() {
           </div>
 
           {/* Canvas */}
-          <div className="flex-1 min-h-[600px]">
+          <div className="flex-1 min-h-[600px] h-full">
             <SVGCanvas
-              mannequinPath="/images/master/fashion_croquis_clean.svg"
+              mannequinPath="/images/master/fashion_clean.svg"
+              selectedTopWithNecks={selectedItems.topWithNecks}
               selectedSilhouette={selectedItems.silhouettes}
               selectedNecklineFront={selectedItems.necklinesFront}
               selectedNecklineBack={selectedItems.necklinesBack}
