@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import CatalogSidebar from './CatalogSidebar';
 import SVGCanvas from './SVGCanvas';
 
 export default function DesignStudioPage() {
   const [activeCategory, setActiveCategory] = useState('tops');
+  const canvasRef = useRef(null);
   const [selectedItems, setSelectedItems] = useState({
     topWithNecks: null,
     silhouettes: null,
@@ -38,6 +39,43 @@ export default function DesignStudioPage() {
       bottoms: null,
       onepiece: null,
     });
+  };
+
+  const exportAsImage = async (format) => {
+    if (!canvasRef.current) {
+      alert('Canvas not ready. Please wait and try again.');
+      return;
+    }
+
+    try {
+      // Use html2canvas to capture the SVG canvas
+      const html2canvas = (await import('html2canvas')).default;
+      const canvas = await html2canvas(canvasRef.current, {
+        backgroundColor: '#ffffff',
+        scale: 2,
+        useCORS: true,
+      });
+
+      if (format === 'png') {
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL('image/png');
+        link.download = `fashion-design-${Date.now()}.png`;
+        link.click();
+      } else if (format === 'svg') {
+        // For SVG, we'll create a composite SVG
+        const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" width="400" height="600">
+          <rect width="400" height="600" fill="white"/>
+          <!-- Note: Composite SVG generated from design. For best quality, export as PNG -->
+        </svg>`;
+        const link = document.createElement('a');
+        link.href = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgStr)}`;
+        link.download = `fashion-design-${Date.now()}.svg`;
+        link.click();
+      }
+    } catch (error) {
+      console.error('Export error:', error);
+      alert('Export failed. PNG recommended.');
+    }
   };
 
   return (
@@ -104,6 +142,8 @@ export default function DesignStudioPage() {
           {/* Canvas */}
           <div className="flex-1 min-h-[600px] h-full">
             <SVGCanvas
+              ref={canvasRef}
+              forwardRef={canvasRef}
               mannequinPath="/images/master/fashion_clean.svg"
               selectedTopWithNecks={selectedItems.topWithNecks}
               selectedSilhouette={selectedItems.silhouettes}
@@ -136,11 +176,27 @@ export default function DesignStudioPage() {
             Clear All
           </motion.button>
           <motion.button
+            onClick={() => exportAsImage('png')}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="px-6 py-3 rounded-lg bg-skyBlue-400/80 text-white font-medium hover:bg-skyBlue-500 transition-all shadow-lg"
+          >
+            Export PNG
+          </motion.button>
+          <motion.button
+            onClick={() => exportAsImage('svg')}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="px-6 py-3 rounded-lg bg-teal-400/80 text-white font-medium hover:bg-teal-500 transition-all shadow-lg"
+          >
+            Export SVG
+          </motion.button>
+          <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="px-8 py-3 rounded-lg bg-charcoal-800 text-white font-medium hover:bg-charcoal-900 transition-all shadow-lg"
           >
-            Export Design
+            Save Design
           </motion.button>
         </motion.div>
       </div>

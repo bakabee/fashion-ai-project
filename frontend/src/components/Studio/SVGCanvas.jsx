@@ -10,11 +10,13 @@ export default function SVGCanvas({
   selectedSleeve = null,
   selectedBottom = null,
   selectedOnepiece = null,
+  forwardRef = null,
 }) {
   const [mannequinLoaded, setMannequinLoaded] = useState(false);
 
   return (
     <motion.div
+      ref={forwardRef}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className="flex-1 flex items-center justify-center p-8 bg-gradient-to-br from-beige-50 via-skyBlue-50/20 to-beige-100/30 rounded-2xl"
