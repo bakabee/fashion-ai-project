@@ -128,7 +128,10 @@ export default function CatalogPage() {
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
-                  onClick={() => navigate(`/studio/viewer?model=${item.id}`)}
+                   onClick={() => {
+                      const s = item.id === 'sleeved' ? 'full_sleeve' : '';
+                      navigate(`/studio/viewer?body=boat_bandeau${s ? `&sleeve=${s}` : ''}`);
+                    }}
                   className="w-full py-2.5 rounded-lg bg-charcoal-800 text-white font-medium tracking-wider text-xs uppercase hover:bg-charcoal-900 transition-all shadow-sm hover:shadow-md"
                 >
                   View in 3D

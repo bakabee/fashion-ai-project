@@ -1,5 +1,6 @@
 import { useState, useRef, useMemo } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import CatalogSidebar from './CatalogSidebar';
 import SVGCanvas from './SVGCanvas';
 
@@ -45,6 +46,7 @@ function getCombinedTopPath(necklinePath, silhouettePath) {
 
 export default function DesignStudioPage() {
   const canvasRef = useRef(null);
+  const navigate = useNavigate();
   const [selectedItems, setSelectedItems] = useState({
     frontNeck: null,
     silhouette: null,
@@ -76,6 +78,14 @@ export default function DesignStudioPage() {
       silhouette: null,
       sleeve: null,
     });
+  };
+
+  const handleViewIn3D = () => {
+    const sleeve = selectedItems.sleeve;
+    let sleeveParam = '';
+    if (sleeve?.includes('half_sleeves')) sleeveParam = 'half_sleeve';
+    else if (sleeve?.includes('full_fitted_sleeves')) sleeveParam = 'full_sleeve';
+    navigate(`/studio/viewer?body=boat_bandeau&sleeve=${sleeveParam || ''}`);
   };
 
   const exportAsImage = async (format) => {
@@ -170,6 +180,15 @@ export default function DesignStudioPage() {
                 title="Export SVG"
               >
                 SVG
+              </motion.button>
+              <motion.button
+                onClick={handleViewIn3D}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-6 py-3 rounded-lg bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold hover:from-emerald-600 hover:to-teal-600 transition-all shadow-lg text-sm tracking-wider"
+                title="View in 3D"
+              >
+                View 3D
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.05 }}

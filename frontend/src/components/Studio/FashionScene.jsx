@@ -3,13 +3,16 @@ import { useGLTF, Center, ContactShadows, Environment, OrbitControls, Bounds } f
 import { useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
-const modelMap = {
-  top1: '/models/top 1.glb',
-  top2: '/models/top 2.glb',
-  top3: '/models/top 3.glb',
-  shorts: '/models/Shorts.glb',
-  sleeveless: '/models/sweater.glb',
-  sleeved: '/models/sweater.glb',
+const MESH_GROUPS = {
+  body: ['Female_base'],
+  halfSleeves: ['halfsleeves'],
+  fullSleeves: ['full_fitted_sleeves001'],
+};
+
+const MODEL_PATHS = {
+  body: '/models/master.glb',
+  halfSleeves: '/models/half_sleeves.glb',
+  fullSleeves: '/models/fully_fitted_sleeves.glb',
 };
 
 function GradientBackground() {
@@ -60,40 +63,137 @@ function GroundPlane() {
   );
 }
 
-export default function FashionScene({ autoRotate = true, modelId = 'top1', clothingColor = null }) {
+export default function FashionScene({ 
+  autoRotate = true, 
+  selectedBody = null,
+  selectedSleeve = null,
+  clothingColor = null,
+  topColor = null,
+  sleeveColor = null,
+}) {
   const controlsRef = useRef();
   const sceneGroupRef = useRef();
   const camera = useThree((s) => s.camera);
-  const modelPath = modelMap[modelId] || modelMap.top1;
 
-  const { scene } = useGLTF(modelPath);
-  const clonedScene = useMemo(() => scene.clone(), [scene, modelId]);
+  const bodySrc = useGLTF(MODEL_PATHS.body).scene;
+  const halfSrc = useGLTF(MODEL_PATHS.halfSleeves).scene;
+  const fullSrc = useGLTF(MODEL_PATHS.fullSleeves).scene;
+
+  const clonedBody = useMemo(() => bodySrc.clone(), [bodySrc]);
+  const clonedHalf = useMemo(() => halfSrc.clone(), [halfSrc]);
+  const clonedFull = useMemo(() => fullSrc.clone(), [fullSrc]);
+
+  const materialGroupsRef = useRef({
+    body: [],
+    halfSleeves: [],
+    fullSleeves: [],
+  });
 
   useEffect(() => {
     if (camera) {
       camera.position.set(0, 1.2, 4.5);
       camera.lookAt(0, 0, 0);
     }
-  }, [camera, modelId]);
+  }, [camera]);
 
   useEffect(() => {
-    if (!clonedScene) return;
-    const color = clothingColor ? new THREE.Color(clothingColor) : null;
-    clonedScene.traverse((child) => {
+    const groups = { body: [], halfSleeves: [], fullSleeves: [] };
+
+    clonedBody.traverse((child) => {
       if (!child.isMesh) return;
-      const matName = (child.material?.name || child.name || '').toLowerCase();
-      if (/skin|body/.test(matName)) return;
-      const mats = Array.isArray(child.material) ? child.material : [child.material];
+      child.material = Array.isArray(child.material)
+        ? child.material.map(m => m.clone())
+        : child.material.clone();
+      if (MESH_GROUPS.body.includes(child.name)) {
+        groups.body.push(child);
+      }
+    });
+
+    clonedHalf.traverse((child) => {
+      if (!child.isMesh) return;
+      child.material = Array.isArray(child.material)
+        ? child.material.map(m => m.clone())
+        : child.material.clone();
+      if (MESH_GROUPS.halfSleeves.includes(child.name)) {
+        groups.halfSleeves.push(child);
+      }
+    });
+
+    clonedFull.traverse((child) => {
+      if (!child.isMesh) return;
+      child.material = Array.isArray(child.material)
+        ? child.material.map(m => m.clone())
+        : child.material.clone();
+      if (MESH_GROUPS.fullSleeves.includes(child.name)) {
+        groups.fullSleeves.push(child);
+      }
+    });
+
+    materialGroupsRef.current = groups;
+  }, [clonedBody, clonedHalf, clonedFull]);
+
+  useEffect(() => {
+    const bodyVisible = selectedBody === 'boat_bandeau';
+    const halfVisible = selectedSleeve === 'half_sleeve';
+    const fullVisible = selectedSleeve === 'full_sleeve';
+
+    materialGroupsRef.current.body.forEach((mesh) => {
+      mesh.visible = bodyVisible;
+    });
+
+    materialGroupsRef.current.halfSleeves.forEach((mesh) => {
+      mesh.visible = halfVisible;
+    });
+
+    materialGroupsRef.current.fullSleeves.forEach((mesh) => {
+      mesh.visible = fullVisible;
+    });
+  }, [selectedBody, selectedSleeve]);
+
+  useEffect(() => {
+    const bodyColor = topColor || clothingColor;
+    materialGroupsRef.current.body.forEach((mesh) => {
+      if (!mesh.material) return;
+      const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
       mats.forEach((m) => {
-        if (color) {
-          m.color.copy(color);
+        if (bodyColor) {
+          m.color.copy(new THREE.Color(bodyColor));
         } else {
           m.color.set('#ffffff');
         }
         m.needsUpdate = true;
       });
     });
-  }, [clonedScene, clothingColor, modelId]);
+  }, [clonedBody, topColor, clothingColor]);
+
+  useEffect(() => {
+    const sleeveColorVal = sleeveColor || clothingColor;
+    materialGroupsRef.current.halfSleeves.forEach((mesh) => {
+      if (!mesh.material) return;
+      const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+      mats.forEach((m) => {
+        if (sleeveColorVal) {
+          m.color.copy(new THREE.Color(sleeveColorVal));
+        } else {
+          m.color.set('#ffffff');
+        }
+        m.needsUpdate = true;
+      });
+    });
+
+    materialGroupsRef.current.fullSleeves.forEach((mesh) => {
+      if (!mesh.material) return;
+      const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+      mats.forEach((m) => {
+        if (sleeveColorVal) {
+          m.color.copy(new THREE.Color(sleeveColorVal));
+        } else {
+          m.color.set('#ffffff');
+        }
+        m.needsUpdate = true;
+      });
+    });
+  }, [clonedHalf, clonedFull, sleeveColor, clothingColor]);
 
   return (
     <>
@@ -135,7 +235,9 @@ export default function FashionScene({ autoRotate = true, modelId = 'top1', clot
       <Center center>
         <Bounds fit clip damping={6} margin={1.6}>
           <group ref={sceneGroupRef}>
-            <primitive object={clonedScene} scale={1} />
+            <primitive object={clonedBody} scale={1} />
+            <primitive object={clonedHalf} scale={1} />
+            <primitive object={clonedFull} scale={1} />
           </group>
         </Bounds>
       </Center>
