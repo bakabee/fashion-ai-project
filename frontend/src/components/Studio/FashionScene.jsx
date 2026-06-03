@@ -251,37 +251,14 @@ function restoreOriginalMaterialColors(materials) {
 }
 
 function GradientBackground() {
-  const { viewport } = useThree();
   const meshRef = useRef();
-  useEffect(() => {
-    if (meshRef.current) {
-      const cols = [
-        new THREE.Color('#F6F4F1'), new THREE.Color('#E8DCCB'),
-        new THREE.Color('#5DA9A6'), new THREE.Color('#A7C7E7'),
-        new THREE.Color('#F6F4F1'),
-      ];
-      const s = new THREE.CanvasTexture(generateGradientCanvas(cols, 1024, 1024));
-      meshRef.current.material.map = s;
-      meshRef.current.material.needsUpdate = true;
-    }
-  }, []);
+  
   return (
-    <mesh ref={meshRef} position={[0, 0, -3]} scale={[viewport.width * 3, viewport.height * 3, 1]}>
-      <planeGeometry args={[1, 1]} />
-      <meshBasicMaterial />
+    <mesh ref={meshRef} scale={1000}>
+      <sphereGeometry args={[1, 32, 32]} />
+      <meshBasicMaterial color="#ADD8E6" side={THREE.BackSide} />
     </mesh>
   );
-}
-
-function generateGradientCanvas(colors, w, h) {
-  const canvas = document.createElement('canvas');
-  canvas.width = w; canvas.height = h;
-  const ctx = canvas.getContext('2d');
-  const grad = ctx.createLinearGradient(0, 0, w, h);
-  colors.forEach((c, i) => grad.addColorStop(i / (colors.length - 1), c.getStyle()));
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, w, h);
-  return canvas;
 }
 
 function GroundPlane() {
