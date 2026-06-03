@@ -73,35 +73,71 @@ function getActiveGroups(selectedBody, selectedSleeve, selectedBottom) {
 }
 
 function applyVisibility(scene, activeGroups) {
-  // STEP 1: Collect all meshes in a single traversal
+  // STEP 1: Collect all objects (including groups/non-meshes)
+  const allObjects = [];
   const meshMap = new Map();
-  const nonClothingMeshes = [];
+  const meshDuplicates = new Map();
   
   scene.traverse((child) => {
-    if (!child.isMesh) return;
-    meshMap.set(child.name, child);
+    allObjects.push(child);
     
-    // Track non-clothing meshes for visibility preservation
-    if (!ALL_CLOTHING_NAMES.includes(child.name)) {
-      nonClothingMeshes.push(child.name);
+    if (!child.isMesh) return;
+    
+    // Check for duplicates
+    if (meshMap.has(child.name)) {
+      if (!meshDuplicates.has(child.name)) {
+        meshDuplicates.set(child.name, 1);
+      }
+      meshDuplicates.set(child.name, meshDuplicates.get(child.name) + 1);
     }
+    meshMap.set(child.name, child);
   });
   
   // Log available meshes for debugging
   console.group('[Visibility] Mesh inventory');
+  console.log('Total objects in scene:', allObjects.length);
+  console.log('Total meshes found:', meshMap.size);
+  if (meshDuplicates.size > 0) {
+    console.warn('⚠️ DUPLICATE MESH NAMES FOUND:', Array.from(meshDuplicates.entries()));
+  }
   console.log('Available meshes:', Array.from(meshMap.keys()));
   console.log('Active clothing groups:', activeGroups);
+  
+  // Log all clothing meshes and their current visibility
+  console.log('\nCurrent visibility state BEFORE reset:');
+  ALL_CLOTHING_NAMES.forEach((clothingName) => {
+    const mesh = meshMap.get(clothingName);
+    if (mesh) {
+      console.log(`  ${clothingName}: visible=${mesh.visible}, parent=${mesh.parent?.name || 'root'}`);
+    } else {
+      console.warn(`  ${clothingName}: NOT FOUND`);
+    }
+  });
   console.groupEnd();
   
   // STEP 2: STRICT RESET - Hide ALL clothing meshes
+  console.log('[Visibility] STEP 2: Hiding all clothing...');
   ALL_CLOTHING_NAMES.forEach((meshName) => {
     const mesh = meshMap.get(meshName);
     if (mesh) {
+      const wasBefore = mesh.visible;
       mesh.visible = false;
+      const isAfter = mesh.visible;
+      console.log(`  Hidden: ${meshName} (was ${wasBefore}, now ${isAfter})`);
+      
+      // CRITICAL: Verify it actually changed
+      if (wasBefore === true && isAfter === false) {
+        // Good, it worked
+      } else if (wasBefore === false && isAfter === false) {
+        // Already hidden, that's fine
+      } else {
+        console.error(`  ⚠️ WARNING: ${meshName} failed to hide! Still ${isAfter}`);
+      }
     }
   });
   
   // STEP 3: Show ONLY selected items
+  console.log('[Visibility] STEP 3: Showing selected items...');
   const meshesToShow = new Set();
   activeGroups.forEach((groupName) => {
     const groupMeshes = CLOTHING_GROUPS[groupName] || [];
@@ -114,22 +150,37 @@ function applyVisibility(scene, activeGroups) {
     const mesh = meshMap.get(meshName);
     if (mesh) {
       mesh.visible = true;
-      console.log(`[Visibility] Showed: ${meshName}`);
+      console.log(`  Showed: ${meshName}`);
     } else {
-      console.warn(`[Visibility] Mesh not found: ${meshName}`);
+      console.warn(`  Mesh not found: ${meshName}`);
     }
   });
   
   // STEP 4: Always show body
+  console.log('[Visibility] STEP 4: Showing body...');
   const bodyMesh = meshMap.get('Female base');
   if (bodyMesh) {
     bodyMesh.visible = true;
+    console.log('  Showed: Female base');
   } else {
     console.warn('[Visibility] Body mesh not found: Female base');
   }
   
+  // STEP 5: EXTRA CHECK - Force bottoms to be hidden except selected
+  console.log('[Visibility] STEP 5: Extra bottom enforcement...');
+  BOTTOM_MESH_NAMES.forEach((bottomMeshName) => {
+    const mesh = meshMap.get(bottomMeshName);
+    if (mesh) {
+      const shouldBeVisible = meshesToShow.has(bottomMeshName);
+      if (shouldBeVisible !== mesh.visible) {
+        console.warn(`  FIXING: ${bottomMeshName} should be ${shouldBeVisible} but is ${mesh.visible}`);
+        mesh.visible = shouldBeVisible;
+      }
+    }
+  });
+  
   // Log final visibility state
-  console.group('[Visibility] Final state');
+  console.group('[Visibility] FINAL STATE - VERIFICATION PASS');
   const visibleClothing = Array.from(meshMap.entries())
     .filter(([name, mesh]) => mesh.visible && ALL_CLOTHING_NAMES.includes(name))
     .map(([name]) => name);
@@ -137,7 +188,26 @@ function applyVisibility(scene, activeGroups) {
     .filter(([name, mesh]) => !mesh.visible && ALL_CLOTHING_NAMES.includes(name))
     .map(([name]) => name);
   console.log('Visible clothing:', visibleClothing.length > 0 ? visibleClothing : 'None');
-  console.log('Hidden clothing:', hiddenClothing);
+  console.log('Hidden clothing count:', hiddenClothing.length);
+  console.log('Expected visible count:', meshesToShow.size);
+  console.log('Actual visible count:', visibleClothing.length);
+  
+  // CRITICAL CHECK: Is Pleated Skirt visible when it shouldn't be?
+  if (visibleClothing.includes('Pleated Skirt') && !meshesToShow.has('Pleated Skirt')) {
+    console.error('🚨 CRITICAL BUG: Pleated Skirt is visible but should be hidden!');
+    const mesh = meshMap.get('Pleated Skirt');
+    console.error('  Before force: mesh.visible =', mesh.visible);
+    mesh.visible = false;
+    console.error('  After force: mesh.visible =', mesh.visible);
+    
+    // VERIFY by re-traversing
+    console.error('  Re-checking via scene traverse...');
+    scene.traverse((child) => {
+      if (child.name === 'Pleated Skirt') {
+        console.error('    Found in traverse: name=' + child.name + ', visible=' + child.visible);
+      }
+    });
+  }
   console.groupEnd();
 }
 
@@ -253,11 +323,19 @@ export default function FashionScene({
     }
     const s = masterSrc.clone(true);
     s.visible = true;
+    
+    // Count meshes to verify scene loaded
+    let meshCount = 0;
     s.traverse((child) => {
+      if (child.isMesh) meshCount++;
       if (!child.isMesh) return;
       child.material = cloneMaterialSafely(child.material);
     });
-    console.log('[FashionScene] Using master.glb (has selections)');
+    
+    console.log('[FashionScene] Using master.glb (has selections) - meshCount:', meshCount);
+    if (meshCount < 10) {
+      console.warn('[FashionScene] WARNING: Scene may not be fully loaded! Expected ~14 meshes, got:', meshCount);
+    }
     return { scene: s, isFashion: false };
   }, [fashionSrc, masterSrc, hasSelections, selectedBody, selectedSleeve, selectedBottom]);
 
@@ -270,6 +348,17 @@ export default function FashionScene({
     console.log('[Visibility Effect] Running - isFashion:', isFashion, 'hasSelections:', hasSelections);
     if (isFashion) {
       console.log('[Visibility Effect] Skipping - using fashion.glb');
+      return;
+    }
+    
+    // Check if scene is fully loaded
+    let meshCount = 0;
+    activeScene.traverse((child) => {
+      if (child.isMesh) meshCount++;
+    });
+    
+    if (meshCount < 10) {
+      console.warn('[Visibility Effect] Skipping - scene not fully loaded yet. Meshes:', meshCount);
       return;
     }
     
