@@ -14,7 +14,6 @@ const CLOTHING_GROUPS = {
   denim_shorts: ['denim_shorts'],
   hemmed_skirt: ['hemmed_skirt'],
   long_skirt: ['long_skirt'],
-  pleated_skirt: ['Pleated Skirt'],
 };
 
 const ALL_CLOTHING_NAMES = [...new Set(Object.values(CLOTHING_GROUPS).flat())];
@@ -23,7 +22,7 @@ const SLEEVE_MESH_NAMES = [
   ...CLOTHING_GROUPS.half_sleeve,
   ...CLOTHING_GROUPS.full_sleeve,
 ];
-const BOTTOM_GROUP_KEYS = ['shorts', 'long_pants', 'beach_shorts', 'cargo_pants', 'denim_shorts', 'hemmed_skirt', 'long_skirt', 'pleated_skirt'];
+const BOTTOM_GROUP_KEYS = ['shorts', 'long_pants', 'beach_shorts', 'cargo_pants', 'denim_shorts', 'hemmed_skirt', 'long_skirt'];
 const BOTTOM_MESH_NAMES = BOTTOM_GROUP_KEYS.flatMap((key) => CLOTHING_GROUPS[key] || []);
 const BODY_MESH_NAMES = ['Female base'];
 
@@ -353,16 +352,23 @@ export default function FashionScene({
     
     // Check if scene is fully loaded
     let meshCount = 0;
+    const foundMeshes = [];
     activeScene.traverse((child) => {
-      if (child.isMesh) meshCount++;
+      if (child.isMesh) {
+        meshCount++;
+        foundMeshes.push(child.name);
+      }
     });
     
+    console.log('[Visibility Effect] Found meshes:', foundMeshes);
+    console.log('[Visibility Effect] meshCount:', meshCount);
+    
     if (meshCount < 10) {
-      console.warn('[Visibility Effect] Skipping - scene not fully loaded yet. Meshes:', meshCount);
+      console.warn('[Visibility Effect] Skipping - scene not fully loaded yet. Meshes:', meshCount, foundMeshes);
       return;
     }
     
-    console.log('[Visibility Effect] Applying visibility logic');
+    console.log('[Visibility Effect] Scene ready! Applying visibility logic');
     // Validate mesh names on first load
     validateMeshNames(activeScene);
     
