@@ -73,7 +73,17 @@ export default function ViewerPage() {
   const rawSelectedBody = searchParams.get('body') || null;
   const selectedSleeve = searchParams.get('sleeve') || null;
   const selectedBottom = searchParams.get('bottom') || null;
-  const selectedBody = rawSelectedBody === 'boat_bandeau' ? rawSelectedBody : null;
+  
+  // Map silhouette file paths to mesh names
+  const silhouetteToMeshMap = {
+    '/images/silhoutes/bandeau_top.svg': 'boat_bandeau',
+    'bandeau_top.svg': 'boat_bandeau',
+    'bandeau': 'boat_bandeau',
+  };
+  
+  // Resolve mesh name from silhouette path or direct mesh name
+  const resolvedBody = silhouetteToMeshMap[rawSelectedBody] || rawSelectedBody;
+  const selectedBody = resolvedBody === 'boat_bandeau' ? resolvedBody : null;
   const [autoRotate, setAutoRotate] = useState(true);
   const [clothingColor, setClothingColor] = useState(null);
   const [topColor, setTopColor] = useState(searchParams.get('topColor') || null);
@@ -96,6 +106,12 @@ export default function ViewerPage() {
       topSelected: searchParams.get('topSelected'),
       explicitTop: searchParams.get('explicitTop'),
     });
+    console.log('Silhouette mapping:', {
+      rawSelectedBody,
+      resolvedBody,
+      selectedBody,
+      mapped: silhouetteToMeshMap[rawSelectedBody] ? 'YES' : 'NO',
+    });
     console.log('Normalized 3D outfit state:', {
       selectedBody,
       selectedSleeve,
@@ -105,7 +121,7 @@ export default function ViewerPage() {
       console.log('NO OUTFIT SELECTED');
     }
     console.groupEnd();
-  }, [rawSelectedBody, selectedBody, selectedSleeve, selectedBottom, searchParams]);
+  }, [rawSelectedBody, selectedBody, selectedSleeve, selectedBottom, searchParams, resolvedBody]);
 
   const updateColorParam = (param, value) => {
     const next = new URLSearchParams(searchParams);

@@ -244,9 +244,11 @@ export default function FashionScene({
   const hasSelections = Boolean(selectedBody || selectedSleeve || selectedBottom);
 
   const { scene: activeScene, isFashion } = useMemo(() => {
+    console.log('[FashionScene] Creating scene - hasSelections:', hasSelections, { selectedBody, selectedSleeve, selectedBottom });
     if (!hasSelections) {
       const s = fashionSrc.clone(true);
       s.visible = true;
+      console.log('[FashionScene] Using fashion.glb (no selections)');
       return { scene: s, isFashion: true };
     }
     const s = masterSrc.clone(true);
@@ -255,8 +257,9 @@ export default function FashionScene({
       if (!child.isMesh) return;
       child.material = cloneMaterialSafely(child.material);
     });
+    console.log('[FashionScene] Using master.glb (has selections)');
     return { scene: s, isFashion: false };
-  }, [fashionSrc, masterSrc, hasSelections]);
+  }, [fashionSrc, masterSrc, hasSelections, selectedBody, selectedSleeve, selectedBottom]);
 
   const activeGroups = useMemo(
     () => getActiveGroups(selectedBody, selectedSleeve, selectedBottom),
@@ -264,8 +267,13 @@ export default function FashionScene({
   );
 
   useEffect(() => {
-    if (isFashion) return;
+    console.log('[Visibility Effect] Running - isFashion:', isFashion, 'hasSelections:', hasSelections);
+    if (isFashion) {
+      console.log('[Visibility Effect] Skipping - using fashion.glb');
+      return;
+    }
     
+    console.log('[Visibility Effect] Applying visibility logic');
     // Validate mesh names on first load
     validateMeshNames(activeScene);
     
@@ -284,7 +292,7 @@ export default function FashionScene({
     
     // Log result
     console.log('[FashionScene] Visibility applied successfully');
-  }, [activeScene, activeGroups, isFashion, selectedBody, selectedSleeve, selectedBottom]);
+  }, [activeScene, activeGroups, isFashion, selectedBody, selectedSleeve, selectedBottom, hasSelections]);
 
   const clothingMeshRefs = useRef({});
   const materialGroupsRef = useRef({
