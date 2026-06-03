@@ -16,7 +16,14 @@ const categoryGroups = [
     id: 'bottoms',
     label: 'Bottoms',
     items: [
-      { id: 'shorts', name: 'Shorts', image: '/images/shorts.jpg', description: 'Tailored shorts with pressed crease' },
+      { id: 'shorts', name: 'Shorts', image: '/images/bottoms/shorts.svg', description: 'Tailored shorts with pressed crease' },
+      { id: 'long_pants', name: 'Long Pants', image: '/images/bottoms/long_pants.svg', description: 'Sleek long pants with clean lines' },
+      { id: 'cargo_pants', name: 'Cargo Pants', image: '/images/bottoms/cargo_pants.svg', description: 'Utility cargo pants with side pockets' },
+      { id: 'beach_shorts', name: 'Beach Shorts', image: '/images/bottoms/beach_shorts.svg', description: 'Casual beach shorts for summer' },
+      { id: 'denim_shorts', name: 'Denim Shorts', image: '/images/bottoms/denim_shorts.svg', description: 'Classic denim shorts with frayed hem' },
+      { id: 'hemmed_skirt', name: 'Hemmed Skirt', image: '/images/bottoms/hemmed_skirt.svg', description: 'Elegant hemmed skirt for any occasion' },
+      { id: 'long_skirt', name: 'Long Skirt', image: '/images/bottoms/long_skirt.svg', description: 'Floor-length skirt with graceful drape' },
+      { id: 'pleated_skirt', name: 'Pleated Skirt', image: '/images/bottoms/pleated_skirt.svg', description: 'Classic pleated skirt with movement' },
     ],
   },
   {

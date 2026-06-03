@@ -27,7 +27,7 @@ export default function StudioNavBar() {
             onClick={() => navigate('/')}
             className="text-2xl font-bold text-charcoal-800 font-display"
           >
-            AI Fashion
+            Sketch to Stitch
           </motion.button>
 
           {/* Navigation Items */}
@@ -71,7 +71,7 @@ export default function StudioNavBar() {
           onClick={() => navigate('/')}
           className="text-xl font-bold text-charcoal-800 font-display"
         >
-          AI Fashion
+          Sketch to Stitch
         </motion.button>
 
         <button onClick={() => setIsOpen(!isOpen)} className="text-charcoal-800">

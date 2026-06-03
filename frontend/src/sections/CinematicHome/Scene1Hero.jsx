@@ -44,9 +44,9 @@ export default function Scene1Hero() {
           ref={titleRef}
           className="font-display text-7xl md:text-8xl font-bold text-white mb-6"
         >
-          AI Fashion
+          Sketch to
           <br />
-          Design Studio
+          Stitch
         </motion.h1>
 
         <motion.p

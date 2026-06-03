@@ -255,7 +255,7 @@ function HeroCinematic({ onEnter }) {
   return (
     <section className="landing-hero">
       <div className="hero-copy">
-        <p className="landing-kicker">Maison Neural Motion System</p>
+        <p className="landing-kicker">Sketch to Stitch Motion System</p>
         <h1>
           {["Fashion", "Stories", "That", "Move"].map((word) => (
             <span key={word} className="cinematic-line">

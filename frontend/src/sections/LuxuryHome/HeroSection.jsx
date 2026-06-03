@@ -79,23 +79,23 @@ export default function HeroSection() {
         <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-20 w-full justify-center">
           <div className="flex-1 max-w-lg text-center lg:text-right order-2 lg:order-1">
             <p className="text-[10px] tracking-[0.3em] uppercase text-dark-500 mb-4 font-medium">
-              Fashion Intelligence Platform
+              Sketch to Stitch
             </p>
 
             <h1
               ref={titleRef}
               className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-dark-800 tracking-tight leading-[1.05]"
             >
-              AI Fashion
+              Sketch to
               <br />
-              <span className="text-dark-500 font-light italic">Design Studio</span>
+              <span className="text-dark-500 font-light italic">Stitch</span>
             </h1>
 
             <p
               ref={subtitleRef}
               className="mt-6 text-base md:text-lg text-dark-600 font-light leading-relaxed max-w-sm mx-auto lg:ml-auto"
             >
-              Where sketches become wearable fashion. From concept to creation — your complete AI-powered atelier.
+              Where sketches become wearable fashion. From concept to creation — your complete design atelier.
             </p>
 
             <motion.button
@@ -129,7 +129,7 @@ export default function HeroSection() {
               <div className="absolute -inset-2 border border-black/5 rotate-3" />
               <img
                 src="/images/ea5f01f0ac1fcd13e8be1ed74f18678a.jpg"
-                alt="AI Fashion Design Studio"
+                alt="Sketch to Stitch"
                 className="w-full h-auto object-contain relative z-10"
               />
               <div className="absolute -bottom-3 -right-3 bg-white/90 backdrop-blur-sm border border-teal-400/20 px-3 py-2 z-20 shadow-sm">

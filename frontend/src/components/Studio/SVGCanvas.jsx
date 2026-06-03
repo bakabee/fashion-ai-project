@@ -6,6 +6,8 @@ export default function SVGCanvas({
   selectedNeckline = null,
   combinedTopPath = null,
   selectedSleeve = null,
+  selectedBottom = null,
+  selectedOnePiece = null,
   forwardRef = null,
 }) {
   const [mannequinLoaded, setMannequinLoaded] = useState(false);
@@ -29,19 +31,7 @@ export default function SVGCanvas({
           onLoad={() => setMannequinLoaded(true)}
         />
 
-        {/* NECKLINE PREVIEW: shown only when neckline selected but no combined top yet */}
-        {selectedNeckline && !combinedTopPath && (
-          <motion.img
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3 }}
-            src={selectedNeckline}
-            alt="Neckline"
-            className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-          />
-        )}
-
-        {/* GENERATED_TOP: combined top from tops_with_necks when both neckline+silhouette selected */}
+        {/* TOP LAYER: combined top when both neckline+silhouette selected */}
         {combinedTopPath && (
           <motion.img
             initial={{ opacity: 0 }}
@@ -53,14 +43,50 @@ export default function SVGCanvas({
           />
         )}
 
+        {/* NECKLINE PREVIEW: shown only when neckline selected but no combined top yet */}
+        {selectedNeckline && !combinedTopPath && !selectedOnePiece && (
+          <motion.img
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+            src={selectedNeckline}
+            alt="Neckline"
+            className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+          />
+        )}
+
         {/* SLEEVE: sleeve overlay */}
-        {selectedSleeve && selectedSleeve !== '__no_sleeve__' && (
+        {selectedSleeve && selectedSleeve !== '__no_sleeve__' && !selectedOnePiece && (
           <motion.img
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: 0.1 }}
             src={selectedSleeve}
             alt="Sleeves"
+            className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+          />
+        )}
+
+        {/* BOTTOM LAYER: bottom garment */}
+        {selectedBottom && !selectedOnePiece && (
+          <motion.img
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
+            src={selectedBottom}
+            alt="Bottom"
+            className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+          />
+        )}
+
+        {/* ONE PIECE LAYER: dress / one-piece overlay */}
+        {selectedOnePiece && (
+          <motion.img
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+            src={selectedOnePiece}
+            alt="One Piece"
             className="absolute inset-0 w-full h-full object-cover pointer-events-none"
           />
         )}

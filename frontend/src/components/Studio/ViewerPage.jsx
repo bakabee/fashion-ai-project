@@ -8,32 +8,43 @@ import FashionScene from './FashionScene';
 
 const colorPalettes = [
   {
-    label: 'Neutral',
-    colors: [
-      { name: 'Black', hex: '#1A1A1A' },
-      { name: 'White', hex: '#FFFFFF' },
-      { name: 'Cream', hex: '#F5F0EB' },
-      { name: 'Beige', hex: '#E8DCCB' },
-      { name: 'Charcoal', hex: '#2B2B2B' },
-    ],
-  },
-  {
     label: 'Pastel',
     colors: [
-      { name: 'Sky Blue', hex: '#A7C7E7' },
-      { name: 'Blush Pink', hex: '#D4A5A5' },
-      { name: 'Lavender', hex: '#C3B1E1' },
-      { name: 'Mint', hex: '#A8D5BA' },
+      { name: 'Powder Rose', hex: '#F8BBD0' },
+      { name: 'Runway Pink', hex: '#F48FB1' },
+      { name: 'Soft Orchid', hex: '#CE93D8' },
+      { name: 'Lilac Drape', hex: '#B39DDB' },
+      { name: 'Sky Atelier', hex: '#81D4FA' },
     ],
   },
   {
-    label: 'Luxury',
+    label: 'Luxury Neutral',
     colors: [
-      { name: 'Teal', hex: '#5DA9A6' },
-      { name: 'Emerald', hex: '#2E8B57' },
-      { name: 'Navy', hex: '#1C2D3D' },
-      { name: 'Wine Red', hex: '#6E2C3D' },
-      { name: 'Gold', hex: '#C4A35A' },
+      { name: 'Noir', hex: '#1C1C1C' },
+      { name: 'Graphite', hex: '#2C2C2C' },
+      { name: 'Silver', hex: '#C0C0C0' },
+      { name: 'Cashmere', hex: '#D7CCC8' },
+      { name: 'Optic White', hex: '#FFFFFF' },
+    ],
+  },
+  {
+    label: 'Trendy',
+    colors: [
+      { name: 'Coral Flash', hex: '#FF6B6B' },
+      { name: 'Aqua Pop', hex: '#4ECDC4' },
+      { name: 'Lemon Vinyl', hex: '#FFE66D' },
+      { name: 'Electric Violet', hex: '#6C5CE7' },
+      { name: 'Mint Signal', hex: '#00B894' },
+    ],
+  },
+  {
+    label: 'Earthy',
+    colors: [
+      { name: 'Taupe', hex: '#A1887F' },
+      { name: 'Cocoa', hex: '#8D6E63' },
+      { name: 'Clay Silk', hex: '#D7CCC8' },
+      { name: 'Sage', hex: '#81C784' },
+      { name: 'Warm Ivory', hex: '#FFF3E0' },
     ],
   },
 ];
@@ -58,17 +69,84 @@ export default function ViewerPage() {
   const controlsRef = useRef(null);
   const paletteRef = useRef(null);
   const navRef = useRef(null);
-  const [searchParams] = useSearchParams();
-  const selectedBody = searchParams.get('body') || null;
+  const [searchParams, setSearchParams] = useSearchParams();
+  const rawSelectedBody = searchParams.get('body') || null;
   const selectedSleeve = searchParams.get('sleeve') || null;
+  const selectedBottom = searchParams.get('bottom') || null;
+  const selectedBody = rawSelectedBody === 'boat_bandeau' ? rawSelectedBody : null;
   const [autoRotate, setAutoRotate] = useState(true);
   const [clothingColor, setClothingColor] = useState(null);
-  const [topColor, setTopColor] = useState(null);
-  const [sleeveColor, setSleeveColor] = useState(null);
+  const [topColor, setTopColor] = useState(searchParams.get('topColor') || null);
+  const [sleeveColor, setSleeveColor] = useState(searchParams.get('sleeveColor') || null);
+  const [bottomColor, setBottomColor] = useState(searchParams.get('bottomColor') || null);
+  const [resetVersion, setResetVersion] = useState(0);
 
   useEffect(() => {
     setClothingColor(null);
-  }, [selectedBody, selectedSleeve]);
+  }, [selectedBody, selectedSleeve, selectedBottom]);
+
+  useEffect(() => {
+    const noOutfitSelected = !selectedBody && !selectedSleeve && !selectedBottom;
+    console.groupCollapsed('[ViewerPage] incoming outfit state');
+    console.log('Raw query state from design page:', {
+      body: rawSelectedBody,
+      sleeve: selectedSleeve,
+      bottom: selectedBottom,
+      top: searchParams.get('top'),
+      topSelected: searchParams.get('topSelected'),
+      explicitTop: searchParams.get('explicitTop'),
+    });
+    console.log('Normalized 3D outfit state:', {
+      selectedBody,
+      selectedSleeve,
+      selectedBottom,
+    });
+    if (noOutfitSelected) {
+      console.log('NO OUTFIT SELECTED');
+    }
+    console.groupEnd();
+  }, [rawSelectedBody, selectedBody, selectedSleeve, selectedBottom, searchParams]);
+
+  const updateColorParam = (param, value) => {
+    const next = new URLSearchParams(searchParams);
+    if (value) {
+      next.set(param, value);
+    } else {
+      next.delete(param);
+    }
+    setSearchParams(next, { replace: true });
+  };
+
+  const handleTopColor = (hex) => {
+    const next = topColor === hex ? null : hex;
+    setTopColor(next);
+    updateColorParam('topColor', next);
+  };
+
+  const handleSleeveColor = (hex) => {
+    const next = sleeveColor === hex ? null : hex;
+    setSleeveColor(next);
+    updateColorParam('sleeveColor', next);
+  };
+
+  const handleBottomColor = (hex) => {
+    const next = bottomColor === hex ? null : hex;
+    setBottomColor(next);
+    updateColorParam('bottomColor', next);
+  };
+
+  const resetViewerState = () => {
+    setTopColor(null);
+    setSleeveColor(null);
+    setBottomColor(null);
+    setClothingColor(null);
+    setResetVersion((version) => version + 1);
+    const next = new URLSearchParams(searchParams);
+    next.delete('topColor');
+    next.delete('sleeveColor');
+    next.delete('bottomColor');
+    setSearchParams(next, { replace: true });
+  };
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -83,7 +161,9 @@ export default function ViewerPage() {
 
   const displayLabel = selectedSleeve === 'half_sleeve' ? 'Half Sleeves'
     : selectedSleeve === 'full_sleeve' ? 'Full Fitted Sleeves'
-    : 'Boat Bandeau Body';
+    : selectedBody === 'boat_bandeau' ? 'Boat Bandeau Body'
+    : selectedBottom ? selectedBottom.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+    : 'Naked Mannequin';
 
   return (
     <div ref={containerRef} className="min-h-screen bg-gradient-to-b from-offWhite via-beige-200/20 to-teal-400/10 pt-24 md:pt-28 pb-12 md:pb-16">
@@ -124,9 +204,12 @@ export default function ViewerPage() {
                   autoRotate={autoRotate} 
                   selectedBody={selectedBody}
                   selectedSleeve={selectedSleeve}
+                  selectedBottom={selectedBottom}
                   clothingColor={clothingColor}
                   topColor={topColor}
                   sleeveColor={sleeveColor}
+                  bottomColor={bottomColor}
+                  resetVersion={resetVersion}
                 />
               </Suspense>
             </Canvas>
@@ -173,6 +256,14 @@ export default function ViewerPage() {
           >
             Screenshot
           </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={resetViewerState}
+            className="flex-1 py-3 rounded-xl bg-white/80 border border-rose-300/40 text-charcoal-700 text-sm font-medium tracking-wider uppercase hover:bg-white hover:border-rose-300/70 transition-all"
+          >
+            Reset
+          </motion.button>
         </div>
 
         <div ref={paletteRef} className="mb-6">
@@ -180,15 +271,11 @@ export default function ViewerPage() {
             <p className="text-[10px] tracking-[0.2em] uppercase text-dark-500 font-medium">
               Color Customization
             </p>
-            {(topColor || sleeveColor) && (
+            {(topColor || sleeveColor || bottomColor) && (
               <motion.button
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.96 }}
-                onClick={() => {
-                  setTopColor(null);
-                  setSleeveColor(null);
-                  setClothingColor(null);
-                }}
+                onClick={resetViewerState}
                 className="text-[9px] tracking-wider uppercase text-dark-400 hover:text-dark-600 transition-colors px-3 py-1 rounded-lg border border-teal-400/15 hover:border-teal-400/30"
               >
                 Reset All
@@ -212,7 +299,7 @@ export default function ViewerPage() {
                           key={`top-${swatch.hex}`}
                           whileHover={{ scale: 1.12, y: -2 }}
                           whileTap={{ scale: 0.92 }}
-                          onClick={() => setTopColor(swatch.hex)}
+                          onClick={() => handleTopColor(swatch.hex)}
                           className="flex flex-col items-center gap-1.5"
                         >
                           <div
@@ -250,12 +337,50 @@ export default function ViewerPage() {
                           key={`sleeve-${swatch.hex}`}
                           whileHover={{ scale: 1.12, y: -2 }}
                           whileTap={{ scale: 0.92 }}
-                          onClick={() => setSleeveColor(swatch.hex)}
+                          onClick={() => handleSleeveColor(swatch.hex)}
                           className="flex flex-col items-center gap-1.5"
                         >
                           <div
                             className={`w-7 h-7 rounded-full border-2 transition-all ${
                               sleeveColor === swatch.hex
+                                ? 'border-charcoal-800 shadow-lg scale-110'
+                                : 'border-teal-400/20 hover:border-teal-400/40'
+                            }`}
+                            style={{ backgroundColor: swatch.hex }}
+                          />
+                          <span className="text-[6px] tracking-wide text-dark-400 text-center leading-tight">
+                            {swatch.name}
+                          </span>
+                        </motion.button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="border-t border-teal-400/15 pt-4">
+              <p className="text-[9px] tracking-[0.15em] uppercase text-dark-400 font-medium mb-3">
+                Bottoms Color
+              </p>
+              <div className="space-y-3">
+                {colorPalettes.map((group) => (
+                  <div key={`bottom-${group.label}`}>
+                    <p className="text-[8px] tracking-[0.15em] uppercase text-dark-500 mb-2 opacity-70">
+                      {group.label}
+                    </p>
+                    <div className="flex flex-wrap gap-2.5">
+                      {group.colors.map((swatch) => (
+                        <motion.button
+                          key={`bottom-${swatch.hex}`}
+                          whileHover={{ scale: 1.12, y: -2 }}
+                          whileTap={{ scale: 0.92 }}
+                          onClick={() => handleBottomColor(swatch.hex)}
+                          className="flex flex-col items-center gap-1.5"
+                        >
+                          <div
+                            className={`w-7 h-7 rounded-full border-2 transition-all ${
+                              bottomColor === swatch.hex
                                 ? 'border-charcoal-800 shadow-lg scale-110'
                                 : 'border-teal-400/20 hover:border-teal-400/40'
                             }`}

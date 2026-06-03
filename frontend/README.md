@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# Sketch to Stitch
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+AI-powered fashion design platform — from sketch to wearable garment.
 
 ## Available Scripts
 

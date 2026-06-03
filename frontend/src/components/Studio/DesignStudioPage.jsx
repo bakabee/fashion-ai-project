@@ -44,13 +44,35 @@ function getCombinedTopPath(necklinePath, silhouettePath) {
   return `/images/top with necks/${prefix}_${suffix}.svg`;
 }
 
+function downloadTextFile(contents, filename, type) {
+  const blob = new Blob([contents], { type });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+function escapeXml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
 export default function DesignStudioPage() {
   const canvasRef = useRef(null);
   const navigate = useNavigate();
+  const [activeCategory, setActiveCategory] = useState('top');
   const [selectedItems, setSelectedItems] = useState({
     frontNeck: null,
     silhouette: null,
     sleeve: null,
+    bottomStyle: null,
+    onePieceStyle: null,
   });
 
   const combinedTopPath = useMemo(
@@ -77,15 +99,21 @@ export default function DesignStudioPage() {
       frontNeck: null,
       silhouette: null,
       sleeve: null,
+      bottomStyle: null,
+      onePieceStyle: null,
     });
   };
 
   const handleViewIn3D = () => {
     const sleeve = selectedItems.sleeve;
-    let sleeveParam = '';
-    if (sleeve?.includes('half_sleeves')) sleeveParam = 'half_sleeve';
-    else if (sleeve?.includes('full_fitted_sleeves')) sleeveParam = 'full_sleeve';
-    navigate(`/studio/viewer?body=boat_bandeau&sleeve=${sleeveParam || ''}`);
+    const bottom = selectedItems.bottomStyle;
+    const params = new URLSearchParams();
+    if (selectedItems.silhouette) params.set('body', selectedItems.silhouette);
+    if (sleeve?.includes('half_sleeves')) params.set('sleeve', 'half_sleeve');
+    else if (sleeve?.includes('full_fitted_sleeves')) params.set('sleeve', 'full_sleeve');
+    if (bottom) params.set('bottom', bottom.split('/').pop().replace('.svg', ''));
+    const qs = params.toString();
+    navigate(`/studio/viewer${qs ? `?${qs}` : ''}`);
   };
 
   const exportAsImage = async (format) => {
@@ -94,30 +122,86 @@ export default function DesignStudioPage() {
       return;
     }
     try {
-      const html2canvas = (await import('html2canvas')).default;
-      const canvas = await html2canvas(canvasRef.current, {
-        backgroundColor: '#ffffff',
-        scale: 2,
-        useCORS: true,
-      });
       if (format === 'png') {
+        const html2canvas = (await import('html2canvas')).default;
+        const canvas = await html2canvas(canvasRef.current, {
+          backgroundColor: '#ffffff',
+          scale: 2,
+          useCORS: true,
+        });
         const link = document.createElement('a');
         link.href = canvas.toDataURL('image/png');
         link.download = `fashion-design-${Date.now()}.png`;
         link.click();
       } else if (format === 'svg') {
+        const layers = [
+          { label: 'Mannequin', path: '/images/master/fashion_clean.svg' },
+          combinedTopPath && { label: 'Top', path: combinedTopPath },
+          selectedItems.frontNeck && !combinedTopPath && !selectedItems.onePieceStyle && {
+            label: 'Neckline',
+            path: selectedItems.frontNeck,
+          },
+          selectedItems.sleeve && selectedItems.sleeve !== '__no_sleeve__' && !selectedItems.onePieceStyle && {
+            label: 'Sleeves',
+            path: selectedItems.sleeve,
+          },
+          selectedItems.bottomStyle && !selectedItems.onePieceStyle && {
+            label: 'Bottom',
+            path: selectedItems.bottomStyle,
+          },
+          selectedItems.onePieceStyle && {
+            label: 'One Piece',
+            path: selectedItems.onePieceStyle,
+          },
+        ].filter(Boolean);
+
+        const origin = window.location.origin;
+        const imageLayers = layers.map((layer) => (
+          `  <image href="${escapeXml(origin + layer.path)}" x="0" y="0" width="400" height="600" preserveAspectRatio="xMidYMid slice">
+    <title>${escapeXml(layer.label)}</title>
+  </image>`
+        )).join('\n');
+
         const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" width="400" height="600">
-          <rect width="400" height="600" fill="white"/>
-        </svg>`;
-        const link = document.createElement('a');
-        link.href = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgStr)}`;
-        link.download = `fashion-design-${Date.now()}.svg`;
-        link.click();
+  <rect width="400" height="600" fill="#ffffff"/>
+${imageLayers}
+</svg>`;
+        downloadTextFile(svgStr, `fashion-design-${Date.now()}.svg`, 'image/svg+xml;charset=utf-8');
       }
     } catch (error) {
       console.error('Export error:', error);
       alert('Export failed. PNG recommended.');
     }
+  };
+
+  const saveDesign = () => {
+    const design = {
+      id: `fashion-design-${Date.now()}`,
+      createdAt: new Date().toISOString(),
+      selectedItems,
+      combinedTopPath,
+      summary: currentSelectionSummary(),
+    };
+    const existing = JSON.parse(localStorage.getItem('fashionDesigns') || '[]');
+    localStorage.setItem('fashionDesigns', JSON.stringify([design, ...existing].slice(0, 20)));
+    downloadTextFile(
+      JSON.stringify(design, null, 2),
+      `${design.id}.json`,
+      'application/json;charset=utf-8'
+    );
+  };
+
+  const currentSelectionSummary = () => {
+    const lines = [];
+    if (selectedItems.frontNeck) lines.push(`Neck: ${selectedItems.frontNeck.split('/').pop().replace('.svg', '').replace(/_/g, ' ')}`);
+    if (selectedItems.silhouette) lines.push(`Silhouette: ${selectedItems.silhouette.split('/').pop().replace('.svg', '').replace(/_/g, ' ')}`);
+    if (selectedItems.sleeve) {
+      if (selectedItems.sleeve === '__no_sleeve__') lines.push('Sleeves: None');
+      else lines.push(`Sleeves: ${selectedItems.sleeve.split('/').pop().replace('.svg', '').replace(/_/g, ' ')}`);
+    }
+    if (selectedItems.bottomStyle) lines.push(`Bottom: ${selectedItems.bottomStyle.split('/').pop().replace('.svg', '').replace(/_/g, ' ')}`);
+    if (selectedItems.onePieceStyle) lines.push(`Dress: ${selectedItems.onePieceStyle.split('/').pop().replace('.svg', '').replace(/_/g, ' ')}`);
+    return lines;
   };
 
   return (
@@ -147,6 +231,8 @@ export default function DesignStudioPage() {
             <CatalogSidebar
               onSelect={handleComponentSelect}
               selectedItems={selectedItems}
+              activeCategory={activeCategory}
+              onCategoryChange={setActiveCategory}
             />
           </div>
 
@@ -159,6 +245,8 @@ export default function DesignStudioPage() {
                 selectedNeckline={selectedItems.frontNeck}
                 combinedTopPath={combinedTopPath}
                 selectedSleeve={selectedItems.sleeve}
+                selectedBottom={selectedItems.bottomStyle}
+                selectedOnePiece={selectedItems.onePieceStyle}
               />
             </div>
 
@@ -191,6 +279,7 @@ export default function DesignStudioPage() {
                 View 3D
               </motion.button>
               <motion.button
+                onClick={saveDesign}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="px-6 py-3 rounded-lg bg-charcoal-800 text-white font-semibold hover:bg-charcoal-900 transition-all shadow-lg text-sm tracking-wider"
@@ -210,6 +299,20 @@ export default function DesignStudioPage() {
             </div>
           </div>
         </motion.div>
+
+        {currentSelectionSummary().length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-4 flex-shrink-0"
+          >
+            <div className="inline-flex flex-wrap gap-2 px-4 py-2 rounded-full bg-white/60 backdrop-blur-sm border border-teal-400/10 text-xs text-dark-600">
+              {currentSelectionSummary().map((line, i) => (
+                <span key={i} className="font-medium">{line}</span>
+              ))}
+            </div>
+          </motion.div>
+        )}
       </div>
     </div>
   );

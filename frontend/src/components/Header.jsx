@@ -12,7 +12,7 @@ export function Header() {
       transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
     >
       <a href="#top" className="font-display text-xl font-black tracking-tight text-[var(--color-ink)]">
-        Maison Neural
+        Sketch to Stitch
       </a>
       <nav className="hidden items-center gap-2 md:flex">
         {navItems.map((item) => (

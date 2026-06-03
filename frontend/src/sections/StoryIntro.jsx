@@ -13,7 +13,7 @@ export function StoryIntro() {
             <SectionLabel
               eyebrow="Scene 02 / Story intro"
               title="Your moodboard becomes a moving product system."
-              copy="Maison Neural reads visual intent like an editorial director: silhouette, styling, fabric atmosphere, and try-on readiness are sequenced into one cinematic flow."
+              copy="Sketch to Stitch reads visual intent like an editorial director: silhouette, styling, fabric atmosphere, and try-on readiness are sequenced into one cinematic flow."
             />
           </div>
           <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-3">
