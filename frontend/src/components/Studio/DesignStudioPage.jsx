@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import CatalogSidebar from './CatalogSidebar';
@@ -75,6 +75,31 @@ export default function DesignStudioPage() {
     onePieceStyle: null,
   });
 
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem('designStudioState');
+      if (saved) {
+        setSelectedItems(JSON.parse(saved));
+      }
+    } catch (e) {
+      // ignore parse errors
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    try {
+      sessionStorage.setItem('designStudioState', JSON.stringify(selectedItems));
+    } catch (e) {
+      // ignore storage errors
+    }
+  }, [selectedItems]);
+
   const combinedTopPath = useMemo(
     () => getCombinedTopPath(selectedItems.frontNeck, selectedItems.silhouette),
     [selectedItems.frontNeck, selectedItems.silhouette]
@@ -102,6 +127,14 @@ export default function DesignStudioPage() {
       bottomStyle: null,
       onePieceStyle: null,
     });
+    sessionStorage.removeItem('designStudioState');
+  };
+
+  const getSleeveType = (sleevePath) => {
+    if (!sleevePath) return null;
+    if (sleevePath.includes('half_sleeves')) return 'half_sleeve';
+    if (sleevePath.includes('full_fitted_sleeves')) return 'full_sleeve';
+    return null;
   };
 
   const handleViewIn3D = () => {
@@ -109,11 +142,23 @@ export default function DesignStudioPage() {
     const bottom = selectedItems.bottomStyle;
     const params = new URLSearchParams();
     if (selectedItems.silhouette) params.set('body', selectedItems.silhouette);
-    if (sleeve?.includes('half_sleeves')) params.set('sleeve', 'half_sleeve');
-    else if (sleeve?.includes('full_fitted_sleeves')) params.set('sleeve', 'full_sleeve');
+    const sleeveType = getSleeveType(sleeve);
+    if (sleeveType) params.set('sleeve', sleeveType);
     if (bottom) params.set('bottom', bottom.split('/').pop().replace('.svg', ''));
     const qs = params.toString();
     navigate(`/studio/viewer${qs ? `?${qs}` : ''}`);
+  };
+
+  const handleViewPatterns = () => {
+    const sleeve = selectedItems.sleeve;
+    const params = new URLSearchParams();
+    const sleeveType = getSleeveType(sleeve);
+    if (sleeveType) params.set('sleeve', sleeveType);
+    if (selectedItems.silhouette) params.set('body', selectedItems.silhouette);
+    if (selectedItems.frontNeck) params.set('neck', selectedItems.frontNeck);
+    if (selectedItems.bottomStyle) params.set('bottom', selectedItems.bottomStyle);
+    const qs = params.toString();
+    navigate(`/studio/patterns${qs ? `?${qs}` : ''}`);
   };
 
   const exportAsImage = async (format) => {
@@ -268,6 +313,15 @@ ${imageLayers}
                 title="Export SVG"
               >
                 SVG
+              </motion.button>
+              <motion.button
+                onClick={handleViewPatterns}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-6 py-3 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold hover:from-indigo-600 hover:to-purple-600 transition-all shadow-lg text-sm tracking-wider"
+                title="View Patterns"
+              >
+                Patterns
               </motion.button>
               <motion.button
                 onClick={handleViewIn3D}
